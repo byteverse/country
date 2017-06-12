@@ -1,0 +1,9 @@
+resolver: lts-8.17
+packages:
+- './country'
+- './country-code-generation'
+- '../colonnade/siphon'
+- '../colonnade/colonnade'
+extra-deps: []
+flags: {}
+extra-package-dbs: []

@@ -1,0 +1,31 @@
+name: country-code-generation
+version: 0.1.0.0
+-- synopsis:
+-- description:
+homepage: https://github.com/andrewthad/country#readme
+license: BSD3
+license-file: LICENSE
+author: Andrew Martin
+maintainer: andrew.thaddeus@gmail.com
+copyright: 2017 Andrew Martin
+category: Web
+build-type: Simple
+extra-source-files: README.md
+cabal-version: >=1.10
+
+executable country-code-generation
+  hs-source-dirs: app
+  main-is: Main.hs
+  build-depends:
+      base
+    , streaming
+    , streaming-bytestring
+    , bytestring
+    , text
+    , siphon
+    , colonnade
+  default-language: Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/andrewthad/country
