@@ -1,4 +1,5 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE UnboxedTuples #-}
 {-# OPTIONS_HADDOCK not-home #-}
 
 {-| This module provides the data constructor for a 'Country'.
@@ -14,9 +15,11 @@ module Country.Unsafe
   ) where
 
 import Data.Word (Word16)
+import Data.Hashable (Hashable)
+import Data.Primitive.Types (Prim)
 
 -- | A country recognized by ISO 3166.
 newtype Country = Country Word16
-  deriving (Read,Show,Eq,Ord)
+  deriving (Eq,Ord,Prim,Hashable)
 
 
