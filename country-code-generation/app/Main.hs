@@ -24,7 +24,6 @@ main = do
   withCountries "country/src/Country/Unexposed/Encode/English.hs" englishEncoding
   withCountries "country/src/Country/Identifier.hs" identifierModule
   withCountries "country/src/Country/Unexposed/Enumerate.hs" enumerateModule
-  -- withCountries "country/src/Country/Unexposed/AlphaCode.hs" alphaCodeModule
 
 enumerateModule :: Monad m => Stream (Of Country) m r -> Stream (Of Text) m r
 enumerateModule s = do
@@ -154,12 +153,26 @@ decodeUtf8Maybe = either (\_ -> Nothing) Just . decodeUtf8'
 
 decodeChar2 :: ByteString -> Maybe (Char,Char)
 decodeChar2 bs = if BC.length bs == 2
-  then Just (BC.index bs 0,BC.index bs 1)
+  then
+    let b0 = BC.index bs 0
+        b1 = BC.index bs 1
+     in if isUpperAscii b0 && isUpperAscii b1
+          then Just (b0,b1)
+          else Nothing
   else Nothing
+
+isUpperAscii :: Char -> Bool
+isUpperAscii x = x >= 'A' && x <= 'Z'
 
 decodeChar3 :: ByteString -> Maybe (Char,Char,Char)
 decodeChar3 bs = if BC.length bs == 3
-  then Just (BC.index bs 0,BC.index bs 1,BC.index bs 2)
+  then
+    let b0 = BC.index bs 0
+        b1 = BC.index bs 1
+        b2 = BC.index bs 2
+     in if isUpperAscii b0 && isUpperAscii b1 && isUpperAscii b2
+          then Just (b0,b1,b2)
+          else Nothing
   else Nothing
 
 decodeInt :: ByteString -> Maybe Int
