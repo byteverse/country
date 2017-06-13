@@ -1,4 +1,5 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# OPTIONS_HADDOCK not-home #-}
 
 {-| This module provides the data constructor for a 'Country'.
     While pattern matching on a country is perfectly safe,
@@ -14,6 +15,7 @@ module Country.Unsafe
 
 import Data.Word (Word16)
 
+-- | A country recognized by ISO 3166.
 newtype Country = Country Word16
   deriving (Read,Show,Eq,Ord)
 

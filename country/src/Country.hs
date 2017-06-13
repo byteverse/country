@@ -3,8 +3,10 @@
 
 module Country
   ( Country
+    -- * Three digit code
   , encodeNumeric
   , decodeNumeric
+    -- * Name
   , encodeEnglish
   , decode
     -- * Alpha-2 and Alpha-3
@@ -20,7 +22,7 @@ import Country.Unexposed.ExtraNames (extraNames)
 import Country.Unexposed.Enumerate (enumeratedCountries)
 import Data.Text (Text)
 import Data.ByteString (ByteString)
-import Data.Word (Word16)
+import Data.Word (Word16,Word8)
 import Data.Primitive (indexArray,newArray,unsafeFreezeArray,writeArray,
   writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
 import Data.HashMap.Strict (HashMap)
@@ -38,28 +40,38 @@ import qualified Data.Text as T
 import qualified Data.Text.Array as TA
 import qualified Data.Text.Internal as TI
 
+-- | Convert a country to its numeric code. This is a
+--   three-digit number and will consequently be less than 1000.
 encodeNumeric :: Country -> Word16
 encodeNumeric (Country n) = n
 
+-- | Get a country from a numeric code. Any code greater than
+--   999 will not have a country associated with it. Additionally,
+--   many codes are unassigned.
 decodeNumeric :: Word16 -> Maybe Country
-decodeNumeric n = if n < 1000
+decodeNumeric n = if n < 1000 && indexByteArray numericValidities (word16ToInt n) == (1 :: Word8)
   then Just (Country n)
   else Nothing
 
+-- | The name of a country given in English
 encodeEnglish :: Country -> Text
 encodeEnglish (Country n) = indexArray englishCountryNamesText (word16ToInt n)
 
+-- | The alpha-2 country code, uppercase
 alphaTwoUpper :: Country -> Text
 alphaTwoUpper c = TI.text allAlphaTwoUpper (timesTwo (indexOfCountry c)) 2
 
+-- | The alpha-3 country code, uppercase
 alphaThreeUpper :: Country -> Text
 alphaThreeUpper c = TI.text allAlphaThreeUpper (timesThree (indexOfCountry c)) 3
 
-alphaThreeLower :: Country -> Text
-alphaThreeLower c = TI.text allAlphaThreeLower (timesThree (indexOfCountry c)) 3
-
+-- | The alpha-2 country code, lowercase
 alphaTwoLower :: Country -> Text
 alphaTwoLower c = TI.text allAlphaTwoLower (timesTwo (indexOfCountry c)) 2
+
+-- | The alpha-3 country code, lowercase
+alphaThreeLower :: Country -> Text
+alphaThreeLower c = TI.text allAlphaThreeLower (timesThree (indexOfCountry c)) 3
 
 
 half :: Int -> Int
@@ -72,7 +84,8 @@ timesThree :: Int -> Int
 timesThree x = x * 3
 
 
--- | The decoding should be as lenient as possible.
+-- | Parse a country from its name. This function is language-agnostic.
+--   It can handle any source language.
 decode :: Text -> Maybe Country
 decode = flip HM.lookup decodeMap
 
@@ -123,9 +136,24 @@ numberOfCountries = length countryNameQuads
 numberOfPossibleCodes :: Int
 numberOfPossibleCodes = 1000
 
+
+-- | The elements in this array are Word8 (basically boolean)
+numericValidities :: ByteArray
+numericValidities = runST $ do
+  m <- newByteArray numberOfPossibleCodes
+  let clear !ix = if ix < numberOfPossibleCodes
+        then writeByteArray m ix (0 :: Word8)
+        else return ()
+  clear 0
+  forM_ countryNameQuads $ \(n,_,_,_) -> do
+    writeByteArray m (word16ToInt n) (1 :: Word8)
+  unsafeFreezeByteArray m
+{-# NOINLINE numericValidities #-}
+
+-- | The elements in this array are Word16
 positions :: ByteArray
 positions = runST $ do
-  m <- newByteArray (2 * numberOfPossibleCodes)
+  m <- newByteArray (timesTwo numberOfPossibleCodes)
   forM_ (zip (enumFrom (0 :: Word16)) countryNameQuads) $ \(ix,(n,_,_,_)) -> do
     writeByteArray m (word16ToInt n) ix
   unsafeFreezeByteArray m

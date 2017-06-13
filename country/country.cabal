@@ -1,7 +1,21 @@
-name:                country
-version:             0.1.0.0
--- synopsis:
--- description:
+name: country
+version: 0.1
+synopsis: Country data type and functions
+description:
+  The `country` library provides a data type for dealing with
+  the set of countries as defined by ISO 3166. The representation
+  is compact and is well-suited to use with vectors and
+  primitive arrays. Additionally, this library exports functions 
+  that provide the following encodings and decodings:
+  .
+  * ISO Alpha-2 (two-letter country code)
+  .
+  * ISO Alpha-3 (three-letter country code)
+  .
+  * ISO Numeric (three-digit country code)
+  .
+  Please open up an issue on github if there is anything
+  you would like to see added.
 homepage: https://github.com/andrewthad/country#readme
 license: BSD3
 license-file: LICENSE
