@@ -37,6 +37,7 @@ library
     Country.Unexposed.Encode.English
     Country.Unexposed.Enumerate
     Country.Unexposed.ExtraNames
+    Country.Unexposed.Names
   build-depends:
       base >= 4.7 && < 4.10
     , text >= 1.2 && < 1.3

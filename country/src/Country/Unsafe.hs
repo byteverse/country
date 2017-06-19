@@ -17,9 +17,17 @@ module Country.Unsafe
 import Data.Word (Word16)
 import Data.Hashable (Hashable)
 import Data.Primitive.Types (Prim)
+import Data.Primitive (indexArray)
+import Country.Unexposed.Names (englishIdentifierNamesText)
+import qualified Data.Text as T
 
 -- | A country recognized by ISO 3166.
 newtype Country = Country Word16
   deriving (Eq,Ord,Prim,Hashable)
 
+instance Show Country where
+  show (Country n) = T.unpack (indexArray englishIdentifierNamesText (word16ToInt n))
+
+word16ToInt :: Word16 -> Int
+word16ToInt = fromIntegral
 

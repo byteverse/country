@@ -14,11 +14,14 @@ module Country
   , alphaThreeUpper
   , alphaThreeLower
   , alphaTwoLower
+  , decodeAlphaTwo
+  , decodeAlphaThree
   ) where
 
 import Country.Unsafe (Country(..))
 import Country.Unexposed.Encode.English (countryNameQuads)
 import Country.Unexposed.ExtraNames (extraNames)
+import Country.Unexposed.Names (englishCountryNamesText,numberOfPossibleCodes)
 import Country.Unexposed.Enumerate (enumeratedCountries)
 import Data.Text (Text)
 import Data.ByteString (ByteString)
@@ -73,6 +76,31 @@ alphaTwoLower c = TI.text allAlphaTwoLower (timesTwo (indexOfCountry c)) 2
 alphaThreeLower :: Country -> Text
 alphaThreeLower c = TI.text allAlphaThreeLower (timesThree (indexOfCountry c)) 3
 
+decodeAlphaTwo :: Text -> Maybe Country
+decodeAlphaTwo = flip HM.lookup alphaTwoHashMap
+
+decodeAlphaThree :: Text -> Maybe Country
+decodeAlphaThree = flip HM.lookup alphaTwoHashMap
+
+alphaTwoHashMap :: HashMap Text Country
+alphaTwoHashMap = L.foldl'
+  (\hm (countryNum,_,(c1,c2),_) ->
+      HM.insert (T.pack [c1,c2]) (Country countryNum)
+    $ HM.insert (T.pack [toLower c1, toLower c2]) (Country countryNum)
+    $ hm
+  )
+  HM.empty countryNameQuads
+{-# NOINLINE alphaTwoHashMap #-}
+
+alphaThreeHashMap :: HashMap Text Country
+alphaThreeHashMap = L.foldl'
+  (\hm (countryNum,_,_,(c1,c2,c3)) -> 
+      HM.insert (T.pack [c1,c2,c3]) (Country countryNum)
+    $ HM.insert (T.pack [toLower c1, toLower c2, toLower c3]) (Country countryNum)
+    $ hm
+  )
+  HM.empty countryNameQuads
+{-# NOINLINE alphaThreeHashMap #-}
 
 half :: Int -> Int
 half x = unsafeShiftR x 1
@@ -104,7 +132,8 @@ word16ToChar = chr . fromIntegral
 
 decodeMap :: HashMap Text Country
 decodeMap = 
-  let hm1 = L.foldl' (\hm (country,name) -> HM.insert name country hm) HM.empty extraNames
+  let baseMap = HM.union alphaTwoHashMap alphaThreeHashMap
+      hm1 = L.foldl' (\hm (country,name) -> HM.insert name country hm) baseMap extraNames
       hm2 = L.foldl' (\hm (countryNum,name,_,_) -> HM.insert name (Country countryNum) hm) hm1 countryNameQuads
    in hm2
 {-# NOINLINE decodeMap #-}
@@ -119,23 +148,8 @@ sizeofArray :: Array a -> Int
 sizeofArray (Array a) = I# (sizeofArray# a)
 {-# INLINE sizeofArray #-}
 
-englishCountryNamesText :: Array Text
-englishCountryNamesText = runST $ do
-  m <- newArray numberOfPossibleCodes unnamed
-  mapM_ (\(ix,name,_,_) -> writeArray m (word16ToInt ix) name) countryNameQuads
-  unsafeFreezeArray m
-{-# NOINLINE englishCountryNamesText #-}
-
-unnamed :: Text
-unnamed = T.pack "Invalid Country"
-{-# NOINLINE unnamed #-}
-
 numberOfCountries :: Int
 numberOfCountries = length countryNameQuads
-
-numberOfPossibleCodes :: Int
-numberOfPossibleCodes = 1000
-
 
 -- | The elements in this array are Word8 (basically boolean)
 numericValidities :: ByteArray

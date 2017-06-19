@@ -7,6 +7,8 @@ module Country.Unexposed.ExtraNames
 import Country.Unsafe (Country)
 import Country.Identifier
 import Data.Text (Text)
+import Data.Primitive (indexArray,newArray,unsafeFreezeArray,writeArray,
+  writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
 
 extraNames :: [(Country,Text)]
 extraNames =
