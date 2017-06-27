@@ -80,7 +80,7 @@ decodeAlphaTwo :: Text -> Maybe Country
 decodeAlphaTwo = flip HM.lookup alphaTwoHashMap
 
 decodeAlphaThree :: Text -> Maybe Country
-decodeAlphaThree = flip HM.lookup alphaTwoHashMap
+decodeAlphaThree = flip HM.lookup alphaThreeHashMap
 
 alphaTwoHashMap :: HashMap Text Country
 alphaTwoHashMap = L.foldl'
