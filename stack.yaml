@@ -2,8 +2,6 @@ resolver: lts-8.17
 packages:
 - './country'
 - './country-code-generation'
-- '../colonnade/siphon'
-- '../colonnade/colonnade'
 extra-deps:
 - 'siphon-0.7'
 - 'colonnade-1.1.0'
