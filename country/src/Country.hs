@@ -12,6 +12,7 @@ module Country
   , encodeEnglish
   , decode
   , parser
+  , parserUtf8
     -- * Alpha-2 and Alpha-3
   , alphaTwoUpper
   , alphaThreeUpper
@@ -25,6 +26,7 @@ import Country.Unsafe (Country(..))
 import Country.Unexposed.Encode.English (countryNameQuads)
 import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeNumeric,encodeEnglish)
 import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
+import Country.Unexposed.TrieByte (TrieByte,trieByteFromList,trieByteParser)
 import Data.Text (Text)
 import Data.Word (Word16)
 import Data.Primitive (indexArray,writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
@@ -39,8 +41,10 @@ import Data.Bits (unsafeShiftL,unsafeShiftR)
 import Data.Coerce (coerce)
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text.Array as TA
+import qualified Data.Text.Encoding as TE
 import qualified Data.Text.Internal as TI
 import qualified Data.Attoparsec.Text as AT
+import qualified Data.Attoparsec.ByteString as AB
 
 -- | Convert a country to its numeric code. This is a
 --   three-digit number and will consequently be less than 1000.
@@ -93,6 +97,8 @@ decode = flip HM.lookup decodeMap
 parser :: AT.Parser Country
 parser = coerce (trieParser decodeTrie)
 
+parserUtf8 :: AB.Parser Country
+parserUtf8 = coerce (trieByteParser decodeTrieUtf8)
 
 word16ToInt :: Word16 -> Int
 word16ToInt = fromIntegral
@@ -177,5 +183,9 @@ mapTextArray f a@(TA.Array inner) = TA.run $ do
 decodeTrie :: Trie
 decodeTrie = trieFromList (map (\(a,Country x) -> (a,x)) (HM.toList decodeMap))
 {-# NOINLINE decodeTrie #-}
+
+decodeTrieUtf8 :: TrieByte
+decodeTrieUtf8 = trieByteFromList (map (\(a,Country x) -> (TE.encodeUtf8 a,x)) (HM.toList decodeMap))
+{-# NOINLINE decodeTrieUtf8 #-}
 
 

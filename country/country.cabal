@@ -39,6 +39,7 @@ library
     Country.Unexposed.ExtraNames
     Country.Unexposed.Names
     Country.Unexposed.Trie
+    Country.Unexposed.TrieByte
   build-depends:
       base >= 4.7 && < 4.10
     , text >= 1.2 && < 1.3
