@@ -1,5 +1,5 @@
 name: country
-version: 0.1.2
+version: 0.1.3
 synopsis: Country data type and functions
 description:
   The `country` library provides a data type for dealing with
