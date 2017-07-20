@@ -11,6 +11,7 @@ module Country
     -- * Name
   , encodeEnglish
   , decode
+  , parser
     -- * Alpha-2 and Alpha-3
   , alphaTwoUpper
   , alphaThreeUpper
@@ -22,14 +23,11 @@ module Country
 
 import Country.Unsafe (Country(..))
 import Country.Unexposed.Encode.English (countryNameQuads)
-import Country.Unexposed.Names (englishCountryNamesText,numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeNumeric,encodeEnglish)
-import Country.Unexposed.Enumerate (enumeratedCountries)
+import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeNumeric,encodeEnglish)
+import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
 import Data.Text (Text)
-import Data.ByteString (ByteString)
-import Data.Word (Word16,Word8)
-import Data.Primitive (indexArray,newArray,unsafeFreezeArray,writeArray,
-  writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
-import Data.HashMap.Strict (HashMap)
+import Data.Word (Word16)
+import Data.Primitive (indexArray,writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
 import Data.Primitive.Array (Array(..))
 import Data.Primitive.ByteArray (ByteArray(..))
 import GHC.Prim (sizeofByteArray#,sizeofArray#)
@@ -38,10 +36,11 @@ import Control.Monad.ST (runST)
 import Control.Monad
 import Data.Char (ord,chr,toLower)
 import Data.Bits (unsafeShiftL,unsafeShiftR)
-import qualified Data.List as L
+import Data.Coerce (coerce)
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text.Array as TA
 import qualified Data.Text.Internal as TI
+import qualified Data.Attoparsec.Text as AT
 
 -- | Convert a country to its numeric code. This is a
 --   three-digit number and will consequently be less than 1000.
@@ -86,11 +85,17 @@ timesThree x = x * 3
 decode :: Text -> Maybe Country
 decode = flip HM.lookup decodeMap
 
+-- | Parse a country from its name using an attoparsec text parser. This
+--   function is language-agnostic and can handle any source language.
+--   In the case that one possible country name is a prefix of another
+--   possible name (for example, United States vs United States of America),
+--   the longest possible will be parsed.
+parser :: AT.Parser Country
+parser = coerce (trieParser decodeTrie)
+
+
 word16ToInt :: Word16 -> Int
 word16ToInt = fromIntegral
-
-intToWord16 :: Int -> Word16
-intToWord16 = fromIntegral
 
 charToWord16 :: Char -> Word16
 charToWord16 = fromIntegral . ord
@@ -98,15 +103,15 @@ charToWord16 = fromIntegral . ord
 word16ToChar :: Word16 -> Char
 word16ToChar = chr . fromIntegral
 
-arrayFoldl' :: (a -> b -> a) -> a -> Array b -> a
-arrayFoldl' f z a = go 0 z
-  where
-  go i !acc | i < sizeofArray a = go (i+1) (f acc $ indexArray a i)
-            | otherwise         = acc
+-- arrayFoldl' :: (a -> b -> a) -> a -> Array b -> a
+-- arrayFoldl' f z a = go 0 z
+--   where
+--   go i !acc | i < sizeofArray a = go (i+1) (f acc $ indexArray a i)
+--             | otherwise         = acc
 
-sizeofArray :: Array a -> Int
-sizeofArray (Array a) = I# (sizeofArray# a)
-{-# INLINE sizeofArray #-}
+-- sizeofArray :: Array a -> Int
+-- sizeofArray (Array a) = I# (sizeofArray# a)
+-- {-# INLINE sizeofArray #-}
 
 numberOfCountries :: Int
 numberOfCountries = length countryNameQuads
@@ -168,5 +173,9 @@ mapTextArray f a@(TA.Array inner) = TA.run $ do
         else return ()
   go 0
   return m
+
+decodeTrie :: Trie
+decodeTrie = trieFromList (map (\(a,Country x) -> (a,x)) (HM.toList decodeMap))
+{-# NOINLINE decodeTrie #-}
 
 

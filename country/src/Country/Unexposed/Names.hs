@@ -71,6 +71,7 @@ extraNames =
   , (mexico,"México")
   , (mexico,"Méjico")
   , (ålandIslands,"Aland Islands")
+  , (ålandIslands,"Aaland Islands")
   , (venezuelaBolivarianRepublicOf,"Venezuela")
   , (venezuelaBolivarianRepublicOf,"Bolivarian Republic of Venezuela")
   , (boliviaPlurinationalStateOf,"Bolivia")
