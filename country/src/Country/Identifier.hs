@@ -751,3 +751,6 @@ zambia = Country 894
 zimbabwe :: Country
 zimbabwe = Country 716
 
+kosovo :: Country
+kosovo = Country 383
+

@@ -260,5 +260,6 @@ countryNameQuads =
   , (887, T.pack "Yemen",('Y','E'),('Y','E','M'))
   , (894, T.pack "Zambia",('Z','M'),('Z','M','B'))
   , (716, T.pack "Zimbabwe",('Z','W'),('Z','W','E'))
+  , (383, T.pack "Kosovo",('X','K'),('X','K','X'))
   ]
 {-# NOINLINE countryNameQuads #-}
