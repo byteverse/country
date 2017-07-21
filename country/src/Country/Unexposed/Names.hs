@@ -37,7 +37,7 @@ import Data.Word
 import Data.Char (toLower,isAlpha)
 import Country.Unexposed.Encode.English (countryNameQuads)
 import Data.Primitive (Array,indexArray,newArray,unsafeFreezeArray,writeArray,
-  writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
+  writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray,sizeOf)
 import qualified Data.Text as T
 import qualified Data.Scientific as SCI
 
@@ -122,6 +122,43 @@ newtype Country = Country Word16
 
 instance Show Country where
   show (Country n) = T.unpack (indexArray englishIdentifierNamesText (word16ToInt n))
+
+instance Enum Country where
+  fromEnum (Country w) = indexByteArray countryCodeToSequentialMapping (fromIntegral w)
+  toEnum number = if number >= 0 && number < actualNumberOfCountries
+    then Country (indexByteArray sequentialToCountryCodeMapping number)
+    else error ("toEnum: cannot convert " ++ show number ++ " to Country")
+
+instance Bounded Country where
+  minBound = Country (indexByteArray sequentialToCountryCodeMapping 0)
+  maxBound = Country (indexByteArray sequentialToCountryCodeMapping (actualNumberOfCountries - 1))
+
+orderedCountryCodes :: [Word16]
+orderedCountryCodes = L.sort $ map (\(a,_,_,_) -> a) countryNameQuads
+
+countryCodeToSequentialMapping :: ByteArray
+countryCodeToSequentialMapping = runST $ do
+  numbers <- newByteArray (numberOfPossibleCodes * sizeOf (undefined :: Int))
+  forM_ (zip [0 :: Int,1..] orderedCountryCodes) $ \(number,code) -> do
+    writeByteArray numbers (word16ToInt code) number
+  unsafeFreezeByteArray numbers
+{-# NOINLINE countryCodeToSequentialMapping #-}
+
+sequentialToCountryCodeMapping :: ByteArray
+sequentialToCountryCodeMapping = runST $ do
+  codes <- newByteArray (actualNumberOfCountries * sizeOf (undefined :: Word16))
+  forM_ (zip [0 :: Int,1..] orderedCountryCodes) $ \(number,code) -> do
+    writeByteArray codes number (code :: Word16)
+  unsafeFreezeByteArray codes
+{-# NOINLINE sequentialToCountryCodeMapping #-}
+
+actualNumberOfCountries :: Int
+actualNumberOfCountries = length countryNameQuads
+{-# NOINLINE actualNumberOfCountries #-}
+  
+
+codeToEnum :: Word16 -> Int
+codeToEnum w = indexByteArray countryCodeToSequentialMapping (word16ToInt w)
 
 -- todo: add support for encoding directly to bytestring.
 -- Also, add suport for ToJSONKey and FromJSONKey once everything
