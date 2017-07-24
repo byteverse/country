@@ -32,6 +32,7 @@ import qualified Data.Aeson.Types as AET
 import qualified Data.HashMap.Strict as HM
 import qualified Data.List as L
 import Control.Monad.ST
+import Foreign.Storable (Storable)
 import Data.Text (Text)
 import Data.Word
 import Data.Char (toLower,isAlpha)
@@ -118,7 +119,7 @@ decodeMap =
 
 -- | A country recognized by ISO 3166.
 newtype Country = Country Word16
-  deriving (Eq,Ord,Prim,Hashable)
+  deriving (Eq,Ord,Prim,Hashable,Storable)
 
 instance Show Country where
   show (Country n) = T.unpack (indexArray englishIdentifierNamesText (word16ToInt n))
