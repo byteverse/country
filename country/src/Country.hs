@@ -11,6 +11,7 @@ module Country
     -- * Name
   , encodeEnglish
   , decode
+  , decodeUtf8
   , parser
   , parserUtf8
     -- * Alpha-2 and Alpha-3
@@ -24,10 +25,11 @@ module Country
 
 import Country.Unsafe (Country(..))
 import Country.Unexposed.Encode.English (countryNameQuads)
-import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeNumeric,encodeEnglish)
+import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish)
 import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
 import Country.Unexposed.TrieByte (TrieByte,trieByteFromList,trieByteParser)
 import Data.Text (Text)
+import Data.ByteString (ByteString)
 import Data.Word (Word16)
 import Data.Primitive (indexArray,writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
 import Data.Primitive.Array (Array(..))
@@ -88,6 +90,9 @@ timesThree x = x * 3
 --   It can handle any source language.
 decode :: Text -> Maybe Country
 decode = flip HM.lookup decodeMap
+
+decodeUtf8 :: ByteString -> Maybe Country
+decodeUtf8 = flip HM.lookup decodeMapUtf8
 
 -- | Parse a country from its name using an attoparsec text parser. This
 --   function is language-agnostic and can handle any source language.

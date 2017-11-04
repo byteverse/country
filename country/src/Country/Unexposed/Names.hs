@@ -11,6 +11,7 @@ module Country.Unexposed.Names
   , englishIdentifierNamesText
   , numberOfPossibleCodes
   , decodeMap
+  , decodeMapUtf8
   , alphaTwoHashMap
   , alphaThreeHashMap
   , decodeNumeric
@@ -22,10 +23,12 @@ import Data.Word (Word16)
 import Data.Hashable (Hashable)
 import Data.Primitive.Types (Prim)
 import Data.HashMap.Strict (HashMap)
+import Data.ByteString (ByteString)
 import Data.Primitive (indexArray)
 import Data.Primitive.Array (Array(..))
 import Data.Primitive.ByteArray (ByteArray(..))
 import Control.Monad
+import Data.Text.Encoding (encodeUtf8)
 import qualified Data.Text as T
 import qualified Data.Aeson as AE
 import qualified Data.Aeson.Types as AET
@@ -116,6 +119,10 @@ decodeMap =
       hm2 = L.foldl' (\hm (countryNum,name,_,_) -> HM.insert name (Country countryNum) hm) hm1 countryNameQuads
    in hm2
 {-# NOINLINE decodeMap #-}
+
+decodeMapUtf8 :: HashMap ByteString Country
+decodeMapUtf8 = HM.foldlWithKey' (\hm k v -> HM.insert (encodeUtf8 k) v hm) HM.empty decodeMap
+{-# NOINLINE decodeMapUtf8 #-}
 
 -- | A country recognized by ISO 3166.
 newtype Country = Country Word16
