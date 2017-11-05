@@ -29,6 +29,7 @@ import Data.Primitive.Array (Array(..))
 import Data.Primitive.ByteArray (ByteArray(..))
 import Control.Monad
 import Data.Text.Encoding (encodeUtf8)
+import Country.Unexposed.Alias (aliases)
 import qualified Data.Text as T
 import qualified Data.Aeson as AE
 import qualified Data.Aeson.Types as AET
@@ -48,39 +49,6 @@ import qualified Data.Scientific as SCI
 -- | The name of a country given in English
 encodeEnglish :: Country -> Text
 encodeEnglish (Country n) = indexArray englishCountryNamesText (word16ToInt n)
-
-mexico :: Country
-mexico = Country 484
-
-unitedStatesOfAmerica :: Country
-unitedStatesOfAmerica = Country 840
-
-ålandIslands :: Country
-ålandIslands = Country 248
-
-venezuelaBolivarianRepublicOf :: Country
-venezuelaBolivarianRepublicOf = Country 862
-
-boliviaPlurinationalStateOf :: Country
-boliviaPlurinationalStateOf = Country 68
-
-extraNames :: [(Country,Text)]
-extraNames =
-  [ (unitedStatesOfAmerica,"United States")
-  , (unitedStatesOfAmerica,"The United States")
-  , (unitedStatesOfAmerica,"USA")
-  , (unitedStatesOfAmerica,"U.S.A.")
-  , (unitedStatesOfAmerica,"Estados Unidos de América")
-  , (mexico,"Estados Unidos Mexicanos")
-  , (mexico,"México")
-  , (mexico,"Méjico")
-  , (ålandIslands,"Aland Islands")
-  , (ålandIslands,"Aaland Islands")
-  , (venezuelaBolivarianRepublicOf,"Venezuela")
-  , (venezuelaBolivarianRepublicOf,"Bolivarian Republic of Venezuela")
-  , (boliviaPlurinationalStateOf,"Bolivia")
-  , (boliviaPlurinationalStateOf,"Plurinational State of Bolivia")
-  ]
 
 englishCountryNamesText :: Array Text
 englishCountryNamesText = runST $ do
@@ -115,7 +83,7 @@ word16ToInt = fromIntegral
 decodeMap :: HashMap Text Country
 decodeMap = 
   let baseMap = HM.union alphaTwoHashMap alphaThreeHashMap
-      hm1 = L.foldl' (\hm (country,name) -> HM.insert name country hm) baseMap extraNames
+      hm1 = L.foldl' (\hm (countryNum,name) -> HM.insert name (Country countryNum) hm) baseMap aliases
       hm2 = L.foldl' (\hm (countryNum,name,_,_) -> HM.insert name (Country countryNum) hm) hm1 countryNameQuads
    in hm2
 {-# NOINLINE decodeMap #-}

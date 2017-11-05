@@ -86,8 +86,12 @@ timesThree :: Int -> Int
 timesThree x = x * 3
 
 
--- | Parse a country from its name. This function is language-agnostic.
---   It can handle any source language.
+-- | Parse a country from its name. This function is language-agnostic
+--   and is very generous with what it accepts. It handles official
+--   names, colloquial names, acroynms, and obsolete names for many
+--   countries. It strives to handle any source language. Open an
+--   issue on the issue tracker if their are names that are
+--   missing.
 decode :: Text -> Maybe Country
 decode = flip HM.lookup decodeMap
 

@@ -2,6 +2,10 @@ resolver: lts-8.17
 packages:
 - './country'
 - './country-code-generation'
+- location:
+    git: 'https://github.com/andrewthad/disjoint-containers'
+    commit: '184fb1fa3fc4417dac430463661017b7e3a105d3'
+  extra-dep: true
 extra-deps:
 - 'siphon-0.7'
 - 'colonnade-1.1.0'
