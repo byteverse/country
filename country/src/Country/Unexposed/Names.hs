@@ -85,7 +85,8 @@ decodeMap =
   let baseMap = HM.union alphaTwoHashMap alphaThreeHashMap
       hm1 = L.foldl' (\hm (countryNum,name) -> HM.insert name (Country countryNum) hm) baseMap aliases
       hm2 = L.foldl' (\hm (countryNum,name,_,_) -> HM.insert name (Country countryNum) hm) hm1 countryNameQuads
-   in hm2
+      hm3 = HM.foldlWithKey' (\hm name cty -> HM.insert (T.toLower name) cty $ HM.insert (T.toTitle name) cty $ hm) hm2 hm2
+   in hm3
 {-# NOINLINE decodeMap #-}
 
 decodeMapUtf8 :: HashMap ByteString Country
