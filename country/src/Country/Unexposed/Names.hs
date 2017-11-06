@@ -39,7 +39,7 @@ import Control.Monad.ST
 import Foreign.Storable (Storable)
 import Data.Text (Text)
 import Data.Word
-import Data.Char (toLower,isAlpha)
+import Data.Char (toLower,isAlpha,toUpper)
 import Country.Unexposed.Encode.English (countryNameQuads)
 import Data.Primitive (Array,indexArray,newArray,unsafeFreezeArray,writeArray,
   writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray,sizeOf)
@@ -65,7 +65,7 @@ englishIdentifierNamesText = runST $ do
 {-# NOINLINE englishIdentifierNamesText #-}
 
 toIdentifier :: Text -> Text
-toIdentifier t = case (T.uncons . T.filter isAlpha . T.toTitle) t of
+toIdentifier t = case (T.uncons . T.filter isAlpha . slowToTitle) t of
   Nothing -> T.empty
   Just (b,bs) -> T.cons (toLower b) bs
 
@@ -85,9 +85,19 @@ decodeMap =
   let baseMap = HM.union alphaTwoHashMap alphaThreeHashMap
       hm1 = L.foldl' (\hm (countryNum,name) -> HM.insert name (Country countryNum) hm) baseMap aliases
       hm2 = L.foldl' (\hm (countryNum,name,_,_) -> HM.insert name (Country countryNum) hm) hm1 countryNameQuads
-      hm3 = HM.foldlWithKey' (\hm name cty -> HM.insert (T.toLower name) cty $ HM.insert (T.toTitle name) cty $ hm) hm2 hm2
+      hm3 = HM.foldlWithKey' (\hm name cty -> HM.insert (T.toLower name) cty $ HM.insert (slowToTitle name) cty $ hm) hm2 hm2
    in hm3
 {-# NOINLINE decodeMap #-}
+
+-- This is only needed to support the reflex-platform fork of text. Fortunately,
+-- in all the places this is needed, it is only called to build CAFs.
+slowToTitle :: Text -> Text
+slowToTitle = T.intercalate (T.singleton ' ') . map upperFirst . T.splitOn (T.singleton ' ')
+
+upperFirst :: Text -> Text
+upperFirst t = case T.uncons t of
+  Nothing -> T.empty
+  Just (c,cs) -> T.cons (toUpper c) cs
 
 decodeMapUtf8 :: HashMap ByteString Country
 decodeMapUtf8 = HM.foldlWithKey' (\hm k v -> HM.insert (encodeUtf8 k) v hm) HM.empty decodeMap
