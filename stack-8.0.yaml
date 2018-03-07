@@ -1,0 +1,12 @@
+resolver: nightly-2016-05-31
+packages:
+- './country'
+- './country-code-generation'
+extra-deps:
+- disjoint-containers-0.2.3
+- siphon-0.8.0
+- colonnade-1.2.0
+- streaming-0.2.0.0
+- streaming-bytestring-0.1.5
+flags: {}
+extra-package-dbs: []
