@@ -7,10 +7,12 @@ module Country.Unexposed.Trie
 import Data.HashMap.Strict (HashMap)
 import Data.Word (Word16)
 import Data.Text (Text)
+import Data.Semigroup (Semigroup)
 import Control.Applicative ((<|>))
 import qualified Data.Text as T
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Attoparsec.Text as AT
+import qualified Data.Semigroup as SG
 
 -- | If the value is not the max Word16 (65535), there 
 --   is a match. This means that 65535 cannot be used, which 
@@ -36,9 +38,12 @@ singleton fullName code = go fullName where
     Just (char,nameNext) -> Trie placeholder (HM.singleton char (go nameNext))
     Nothing -> Trie code HM.empty
 
+instance Semigroup Trie where
+  (<>) = mappend
+
 instance Monoid Trie where
   mempty = empty
-  mappend = append
+  mappend = (SG.<>)
 
 trieFromList :: [(Text,Word16)] -> Trie
 trieFromList = foldMap (uncurry singleton)

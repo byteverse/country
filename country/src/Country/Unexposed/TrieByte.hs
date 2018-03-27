@@ -7,10 +7,12 @@ module Country.Unexposed.TrieByte
 import Data.HashMap.Strict (HashMap)
 import Data.Word (Word16,Word8)
 import Data.ByteString (ByteString)
+import Data.Semigroup (Semigroup)
 import Control.Applicative ((<|>))
 import qualified Data.ByteString as B
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Attoparsec.ByteString as AB
+import qualified Data.Semigroup as SG
 
 -- | If the value is not the max Word16 (65535), there 
 --   is a match. This means that 65535 cannot be used, which 
@@ -36,9 +38,12 @@ singleton fullName code = go fullName where
     Just (char,nameNext) -> TrieByte placeholder (HM.singleton char (go nameNext))
     Nothing -> TrieByte code HM.empty
 
+instance Semigroup TrieByte where
+  (<>) = append
+
 instance Monoid TrieByte where
   mempty = empty
-  mappend = append
+  mappend = (SG.<>)
 
 trieByteFromList :: [(ByteString,Word16)] -> TrieByte
 trieByteFromList = foldMap (uncurry singleton)
