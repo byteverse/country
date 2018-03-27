@@ -1,0 +1,10 @@
+resolver: nightly-2018-03-26
+packages:
+- './country'
+- './country-code-generation'
+extra-deps:
+- disjoint-containers-0.2.3
+- siphon-0.8.0
+- colonnade-1.2.0
+flags: {}
+extra-package-dbs: []
