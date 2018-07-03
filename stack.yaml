@@ -1,10 +1,12 @@
-resolver: lts-10.8
+resolver: nightly-2018-06-29
 packages:
 - './country'
 - './country-code-generation'
 extra-deps:
 - disjoint-containers-0.2.3
-- siphon-0.8.0
-- colonnade-1.2.0
+- siphon-0.8.1
+- aeson-1.2.4.0
+- base-compat-0.9.3
+- colonnade-1.2.0.1
 flags: {}
 extra-package-dbs: []
