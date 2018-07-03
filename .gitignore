@@ -28,3 +28,4 @@ colonnade/ex1.hs
 colonnade/result
 
 reflex-dom-colonnade/result
+.ghc.environment.*

@@ -20,10 +20,10 @@ executable country-code-generation
       base
     , streaming
     , streaming-bytestring
-    , bytestring
-    , text
-    , siphon
-    , colonnade
+    , bytestring >= 0.10
+    , text >= 1.2
+    , siphon >= 0.8.1
+    , colonnade >= 1.2.0.1
     , disjoint-containers
     , containers
     , transformers
