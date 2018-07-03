@@ -155,7 +155,7 @@ withCountries fn g =
       $ BSM.fromChunks
       $ SMP.map encodeUtf8
       $ g
-      $ S.decodeHeadedUtf8Csv siphon 
+      $ S.decodeCsvUtf8 siphon 
       $ BSM.toChunks
       $ BSM.fromHandle input
     case m of

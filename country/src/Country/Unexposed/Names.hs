@@ -4,6 +4,7 @@
 {-# LANGUAGE UnboxedTuples #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE TypeInType #-}
+{-# LANGUAGE DeriveGeneric #-}
 
 {-# OPTIONS_HADDOCK not-home #-}
 
@@ -20,6 +21,7 @@ module Country.Unexposed.Names
   , Country(..)
   ) where
 
+import Control.DeepSeq (NFData)
 import Data.Word (Word16)
 import Data.Hashable (Hashable)
 import Data.Primitive.Types (Prim)
@@ -46,6 +48,7 @@ import Data.Primitive (Array,indexArray,newArray,unsafeFreezeArray,writeArray,
   writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray,sizeOf)
 import qualified Data.Text as T
 import qualified Data.Scientific as SCI
+import GHC.Generics (Generic)
 
 -- | The name of a country given in English
 encodeEnglish :: Country -> Text
@@ -106,7 +109,7 @@ decodeMapUtf8 = HM.foldlWithKey' (\hm k v -> HM.insert (encodeUtf8 k) v hm) HM.e
 
 -- | A country recognized by ISO 3166.
 newtype Country = Country Word16
-  deriving (Eq,Ord,Prim,Hashable,Storable)
+  deriving (Eq,Ord,Prim,Hashable,Storable,NFData,Generic)
 
 instance Show Country where
   show (Country n) = T.unpack (indexArray englishIdentifierNamesText (word16ToInt n))
