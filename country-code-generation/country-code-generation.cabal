@@ -24,7 +24,7 @@ executable country-code-generation
     , text >= 1.2
     , siphon >= 0.8.1
     , colonnade >= 1.2.0.1
-    , disjoint-containers
+    , disjoint-containers >= 0.2.3
     , containers
     , transformers
   default-language: Haskell2010

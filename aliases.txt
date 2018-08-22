@@ -8,6 +8,34 @@ The United States
 Estados Unidos de América
 Usono
 
+United Kingdom
+United Kingdom of Great Britain and Northern Ireland
+
+South Sudan
+Republic of South Sudan
+
+Bolivia
+Bolivia (Plurinational State of)
+Plurinational State of Bolivia
+
+North Korea
+Korea (Democratic People's Republic of)
+
+South Korea
+Korea (Republic of)
+
+Macedonia
+Macedonia (the former Yugoslav Republic of)
+
+Monaco
+Principality of Monaco
+Principauté de Monaco
+
+Venezuela
+Venezuela (Bolivarian Republic of)
+Bolivarian Republic of Venezuela
+República Bolivariana de Venezuela
+
 Mexico
 Mejico
 United Mexican States
@@ -270,6 +298,8 @@ CH
 
 Taiwan
 Republic of China
+People's Republic of China
+The People's Republic of China
 Chinese Taipei
 中華台北
 Zhonggua Taipei
@@ -278,6 +308,7 @@ Taiwan, Province of China
 
 Tanzania
 United Republic of Tanganyika and Zanzibar
+Tanzania, United Republic of
 
 Transnistria
 Pridnestrovie
@@ -354,12 +385,16 @@ Iran
 Iran (Islamic Republic of)
 Persia
 Islamic Republic of Iran
+The Islamic Republic of Iran
 Faris
 
 Iraq
 Mesopotamia
 Assyria
 Babylon
+
+Palestine
+Palestine, State of
 
 Israel
 State of Israel

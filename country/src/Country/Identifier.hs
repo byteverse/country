@@ -166,8 +166,8 @@ cookIslands = Country 184
 costaRica :: Country
 costaRica = Country 188
 
-côteDIvoire :: Country
-côteDIvoire = Country 384
+côteDivoire :: Country
+côteDivoire = Country 384
 
 croatia :: Country
 croatia = Country 191
@@ -283,8 +283,8 @@ guernsey = Country 831
 guinea :: Country
 guinea = Country 324
 
-guineaBissau :: Country
-guineaBissau = Country 624
+guineabissau :: Country
+guineabissau = Country 624
 
 guyana :: Country
 guyana = Country 328
@@ -355,8 +355,8 @@ kenya = Country 404
 kiribati :: Country
 kiribati = Country 296
 
-koreaDemocraticPeopleSRepublicOf :: Country
-koreaDemocraticPeopleSRepublicOf = Country 408
+koreaDemocraticPeoplesRepublicOf :: Country
+koreaDemocraticPeoplesRepublicOf = Country 408
 
 koreaRepublicOf :: Country
 koreaRepublicOf = Country 410
@@ -367,8 +367,8 @@ kuwait = Country 414
 kyrgyzstan :: Country
 kyrgyzstan = Country 417
 
-laoPeopleSDemocraticRepublic :: Country
-laoPeopleSDemocraticRepublic = Country 418
+laoPeoplesDemocraticRepublic :: Country
+laoPeoplesDemocraticRepublic = Country 418
 
 latvia :: Country
 latvia = Country 428
@@ -667,8 +667,8 @@ tanzaniaUnitedRepublicOf = Country 834
 thailand :: Country
 thailand = Country 764
 
-timorLeste :: Country
-timorLeste = Country 626
+timorleste :: Country
+timorleste = Country 626
 
 togo :: Country
 togo = Country 768
@@ -733,8 +733,8 @@ vietNam = Country 704
 virginIslandsBritish :: Country
 virginIslandsBritish = Country 92
 
-virginIslandsUS :: Country
-virginIslandsUS = Country 850
+virginIslandsUs :: Country
+virginIslandsUs = Country 850
 
 wallisAndFutuna :: Country
 wallisAndFutuna = Country 876
