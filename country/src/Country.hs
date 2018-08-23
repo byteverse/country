@@ -33,7 +33,7 @@ import Data.ByteString (ByteString)
 import Data.Word (Word16)
 import Data.Primitive (writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
 import Data.Primitive.ByteArray (ByteArray(..))
-import GHC.Prim (sizeofByteArray#,sizeofArray#)
+import GHC.Prim (sizeofByteArray#)
 import GHC.Int (Int(..))
 import Control.Monad.ST (runST)
 import Control.Monad
@@ -116,16 +116,6 @@ charToWord16 = fromIntegral . ord
 
 word16ToChar :: Word16 -> Char
 word16ToChar = chr . fromIntegral
-
--- arrayFoldl' :: (a -> b -> a) -> a -> Array b -> a
--- arrayFoldl' f z a = go 0 z
---   where
---   go i !acc | i < sizeofArray a = go (i+1) (f acc $ indexArray a i)
---             | otherwise         = acc
-
--- sizeofArray :: Array a -> Int
--- sizeofArray (Array a) = I# (sizeofArray# a)
--- {-# INLINE sizeofArray #-}
 
 numberOfCountries :: Int
 numberOfCountries = length countryNameQuads
