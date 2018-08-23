@@ -328,6 +328,8 @@ aliases =
   , (484, T.pack "República Mexicana")
   , (484, T.pack "United Mexican States")
   , (583, T.pack "Micronesia (Federated States of)")
+  , (583, T.pack "Federated States of Micronesia")
+  , (583, T.pack "Micronesia")
   , (498, T.pack "Moldova (Republic of)")
   , (498, T.pack "Moldova")
   , (498, T.pack "Republic of Moldova")
