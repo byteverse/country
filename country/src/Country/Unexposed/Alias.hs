@@ -79,6 +79,7 @@ aliases =
   , (76, T.pack "United States of Brazil")
   , (86, T.pack "British Indian Ocean Territory")
   , (96, T.pack "Brunei Darussalam")
+  , (96, T.pack "Brunei")
   , (100, T.pack "Bulgaria")
   , (854, T.pack "Burkina Faso")
   , (108, T.pack "Burundi")
