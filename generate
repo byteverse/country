@@ -1,0 +1,2 @@
+rm -rf dist*
+cabal new-run country-code-generation
