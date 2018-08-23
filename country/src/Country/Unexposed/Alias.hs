@@ -65,6 +65,7 @@ aliases =
   , (68, T.pack "Bolivia")
   , (68, T.pack "Plurinational State of Bolivia")
   , (535, T.pack "Bonaire, Sint Eustatius and Saba")
+  , (535, T.pack "Bonaire, Sint Eustatius, and Saba")
   , (70, T.pack "Bosnia and Herzegovina")
   , (72, T.pack "Botswana")
   , (74, T.pack "Bouvet Island")
