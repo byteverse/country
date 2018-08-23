@@ -382,6 +382,7 @@ aliases =
   , (604, T.pack "Peru")
   , (608, T.pack "Philippines")
   , (612, T.pack "Pitcairn")
+  , (612, T.pack "Pitcairn Islands")
   , (616, T.pack "Poland")
   , (620, T.pack "Portugal")
   , (630, T.pack "Puerto Rico")
