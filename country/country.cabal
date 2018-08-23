@@ -14,6 +14,19 @@ description:
   .
   * ISO Numeric (three-digit country code)
   .
+  . 
+  The main differences between this library and `iso3166-country-codes` are:
+  .
+  * it doesn't use an ADT to represent countries, instead it uses the country's three-digit country code.
+  .
+  * it doesn't use `String` for encoding/decoding
+  .
+  * it provides two-alpha and three-alpha country codes.
+  .
+  * it provides `Prim` instances from the `primitive` package to allow types to be used in unboxed vectors/arrays.
+  .
+  * BSD3 licence instead of LGPL
+  .
   Please open up an issue on github if there is anything
   you would like to see added.
 homepage: https://github.com/andrewthad/country#readme
