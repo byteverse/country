@@ -430,6 +430,7 @@ aliases =
   , (882, T.pack "Samoa")
   , (674, T.pack "San Marino")
   , (678, T.pack "Sao Tome and Principe")
+  , (678, T.pack "São Tomé and Príncipe")
   , (682, T.pack "Saudi Arabia")
   , (686, T.pack "Senegal")
   , (688, T.pack "Serbia")
