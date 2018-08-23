@@ -270,6 +270,8 @@ aliases =
   , (438, T.pack "Liechtenstein")
   , (440, T.pack "Lithuania")
   , (440, T.pack "Lietuva")
+  , (440, T.pack "Lithuania, Republic of")
+  , (440, T.pack "Republic of Lithuania")
   , (440, T.pack "Литва")
   , (442, T.pack "Luxembourg")
   , (442, T.pack "Grand Duchy of Luxembourg")

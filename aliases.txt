@@ -209,6 +209,8 @@ Kingdom of Lesotho
 Lithuania
 Lietuva
 Литва
+Republic of Lithuania
+Lithuania, Republic of
 
 Luxembourg
 Grand Duchy of Luxembourg

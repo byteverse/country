@@ -10,7 +10,7 @@ maintainer: andrew.thaddeus@gmail.com
 copyright: 2017 Andrew Martin
 category: Web
 build-type: Simple
-extra-source-files: README.md
+extra-source-files: README.md, ../aliases.txt, ../countries.csv
 cabal-version: >=1.10
 
 executable country-code-generation
