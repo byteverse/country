@@ -26,6 +26,8 @@ tags
 TAGS
 colonnade/ex1.hs
 colonnade/result
+missing_names.txt
+temp_aliases.txt
 
 reflex-dom-colonnade/result
 .ghc.environment.*

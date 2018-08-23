@@ -148,6 +148,8 @@ aliases =
   , (233, T.pack "Estonia")
   , (231, T.pack "Ethiopia")
   , (238, T.pack "Falkland Islands (Malvinas)")
+  , (238, T.pack "Falkland Islands")
+  , (238, T.pack "Falkland Islands [Malvinas]")
   , (234, T.pack "Faroe Islands")
   , (242, T.pack "Fiji")
   , (246, T.pack "Finland")
