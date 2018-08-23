@@ -427,6 +427,7 @@ aliases =
   , (646, T.pack "Rwandese Republic")
   , (646, T.pack "République du Rwanda")
   , (652, T.pack "Saint Barthélemy")
+  , (652, T.pack "Saint-Barthélemy")
   , (654, T.pack "Saint Helena, Ascension and Tristan da Cunha")
   , (654, T.pack "Saint Helena")
   , (659, T.pack "Saint Kitts and Nevis")
