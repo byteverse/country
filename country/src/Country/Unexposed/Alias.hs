@@ -256,6 +256,7 @@ aliases =
   , (408, T.pack "North Korea")
   , (408, T.pack "조선민주주의인민공화국")
   , (410, T.pack "Korea (Republic of)")
+  , (410, T.pack "Republic of Korea")
   , (410, T.pack "South Korea")
   , (414, T.pack "Kuwait")
   , (417, T.pack "Kyrgyzstan")
