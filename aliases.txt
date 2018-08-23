@@ -13,6 +13,10 @@ Czechia
 Česká republika
 Česko
 
+Holy See
+Vatican
+Vatican City
+
 Timor-Leste
 Democratic Republic of Timor-Leste
 
@@ -28,6 +32,18 @@ Laos
 Congo
 Republic of the Congo
 
+Burkina Faso
+
+Cabo Verde
+
+Cayman Islands
+
+Central African Republic
+
+Christmas Island
+
+Cook Islands
+
 United Kingdom
 United Kingdom of Great Britain and Northern Ireland
 
@@ -37,6 +53,10 @@ Republic of South Sudan
 Bolivia
 Bolivia (Plurinational State of)
 Plurinational State of Bolivia
+
+Costa Rica
+
+Dominican Republic
 
 North Korea
 Korea (Democratic People's Republic of)
@@ -305,6 +325,20 @@ Republic of Rwanda
 République du Rwanda
 Repubulika y'u Rwanda
 Ruanda
+
+American Samoa
+
+Antigua and Barbuda
+
+Bonaire, Sint Eustatius, and Saba
+
+Bosnia and Herzegovina
+
+British Indian Ocean Territory
+
+Virgin Islands (British)
+British Virgin Islands
+
 
 Saint Kitts and Nevis
 Federation of Saint Kitts and Nevis
