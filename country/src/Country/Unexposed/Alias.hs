@@ -259,6 +259,7 @@ aliases =
   , (414, T.pack "Kuwait")
   , (417, T.pack "Kyrgyzstan")
   , (418, T.pack "Lao People's Democratic Republic")
+  , (418, T.pack "Laos")
   , (428, T.pack "Latvia")
   , (428, T.pack "Latvija")
   , (428, T.pack "Letland")
