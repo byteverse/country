@@ -432,6 +432,8 @@ aliases =
   , (659, T.pack "Saint Kitts and Nevis")
   , (659, T.pack "Federation of Saint Kitts and Nevis")
   , (659, T.pack "Saint Kitts-Nevis-Anguilla")
+  , (659, T.pack "St Kitts and Nevis")
+  , (659, T.pack "St. Kitts and Nevis")
   , (662, T.pack "Saint Lucia")
   , (663, T.pack "Saint Martin (French part)")
   , (666, T.pack "Saint Pierre and Miquelon")
