@@ -473,6 +473,7 @@ aliases =
   , (756, T.pack "Svizzera")
   , (756, T.pack "Swiss Confederation")
   , (760, T.pack "Syrian Arab Republic")
+  , (760, T.pack "Syria")
   , (158, T.pack "Taiwan, Province of China")
   , (158, T.pack "Chinese Taipei")
   , (158, T.pack "People's Republic of China")
