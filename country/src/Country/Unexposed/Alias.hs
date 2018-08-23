@@ -109,6 +109,7 @@ aliases =
   , (170, T.pack "Colombia")
   , (174, T.pack "Comoros")
   , (178, T.pack "Congo")
+  , (178, T.pack "Republic of the Congo")
   , (180, T.pack "Congo (Democratic Republic of the)")
   , (184, T.pack "Cook Islands")
   , (188, T.pack "Costa Rica")
