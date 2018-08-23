@@ -451,6 +451,7 @@ aliases =
   , (702, T.pack "Singapura")
   , (702, T.pack "Yugoslavia")
   , (534, T.pack "Sint Maarten (Dutch part)")
+  , (534, T.pack "Sint Maarten")
   , (703, T.pack "Slovakia")
   , (705, T.pack "Slovenia")
   , (90, T.pack "Solomon Islands")
