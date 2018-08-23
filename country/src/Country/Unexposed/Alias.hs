@@ -13,6 +13,7 @@ aliases =
   , (248, T.pack "Åland Islands")
   , (248, T.pack "Aaland Islands")
   , (248, T.pack "Aland Islands")
+  , (248, T.pack "Åland")
   , (8, T.pack "Albania")
   , (8, T.pack "Arbanon")
   , (8, T.pack "Republic of Albania")
