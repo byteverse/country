@@ -322,6 +322,8 @@ aliases =
   , (484, T.pack "United Mexican States")
   , (583, T.pack "Micronesia (Federated States of)")
   , (498, T.pack "Moldova (Republic of)")
+  , (498, T.pack "Moldova")
+  , (498, T.pack "Republic of Moldova")
   , (492, T.pack "Monaco")
   , (492, T.pack "Principality of Monaco")
   , (492, T.pack "Principauté de Monaco")
