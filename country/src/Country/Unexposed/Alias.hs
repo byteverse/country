@@ -500,6 +500,7 @@ aliases =
   , (834, T.pack "United Republic of Tanganyika and Zanzibar")
   , (764, T.pack "Thailand")
   , (626, T.pack "Timor-Leste")
+  , (626, T.pack "Democratic Republic of Timor-Leste")
   , (768, T.pack "Togo")
   , (772, T.pack "Tokelau")
   , (776, T.pack "Tonga")
