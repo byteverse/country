@@ -577,6 +577,7 @@ aliases =
   , (92, T.pack "Virgin Islands (British)")
   , (92, T.pack "British Virgin Islands")
   , (850, T.pack "Virgin Islands (U.S.)")
+  , (850, T.pack "U.S. Virgin Islands")
   , (876, T.pack "Wallis and Futuna")
   , (732, T.pack "Western Sahara")
   , (887, T.pack "Yemen")

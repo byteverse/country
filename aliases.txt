@@ -361,6 +361,9 @@ British Indian Ocean Territory
 Virgin Islands (British)
 British Virgin Islands
 
+Virgin Islands (U.S.)
+U.S. Virgin Islands
+
 St Kitts and Nevis
 St. Kitts and Nevis
 Saint Kitts and Nevis
