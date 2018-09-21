@@ -5,6 +5,7 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE TypeInType #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DeriveDataTypeable #-}
 
 {-# OPTIONS_HADDOCK not-home #-}
 
@@ -49,6 +50,7 @@ import Data.Primitive (Array,indexArray,newArray,unsafeFreezeArray,writeArray,
 import qualified Data.Text as T
 import qualified Data.Scientific as SCI
 import GHC.Generics (Generic)
+import Data.Data
 
 -- | The name of a country given in English
 encodeEnglish :: Country -> Text
@@ -109,7 +111,7 @@ decodeMapUtf8 = HM.foldlWithKey' (\hm k v -> HM.insert (encodeUtf8 k) v hm) HM.e
 
 -- | A country recognized by ISO 3166.
 newtype Country = Country Word16
-  deriving (Eq,Ord,Prim,Hashable,Storable,NFData,Generic)
+  deriving (Eq,Ord,Prim,Hashable,Storable,NFData,Generic,Data,Typeable)
 
 instance Show Country where
   show (Country n) = T.unpack (indexArray englishIdentifierNamesText (word16ToInt n))
