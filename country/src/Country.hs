@@ -3,6 +3,7 @@
 
 {-# OPTIONS_GHC -Wall #-}
 
+-- | Country type and helpers.
 module Country
   ( Country
     -- * Three digit code
@@ -52,7 +53,6 @@ import qualified Data.Attoparsec.ByteString as AB
 encodeNumeric :: Country -> Word16
 encodeNumeric (Country n) = n
 
-
 -- | The alpha-2 country code, uppercase
 alphaTwoUpper :: Country -> Text
 alphaTwoUpper c = TI.text allAlphaTwoUpper (timesTwo (indexOfCountry c)) 2
@@ -69,9 +69,11 @@ alphaTwoLower c = TI.text allAlphaTwoLower (timesTwo (indexOfCountry c)) 2
 alphaThreeLower :: Country -> Text
 alphaThreeLower c = TI.text allAlphaThreeLower (timesThree (indexOfCountry c)) 3
 
+-- | Decode a 'Country' using its alpha-2 country code.
 decodeAlphaTwo :: Text -> Maybe Country
 decodeAlphaTwo = flip HM.lookup alphaTwoHashMap
 
+-- | Decode a 'Country' using its alpha-3 country code.
 decodeAlphaThree :: Text -> Maybe Country
 decodeAlphaThree = flip HM.lookup alphaThreeHashMap
 
@@ -94,6 +96,7 @@ timesThree x = x * 3
 decode :: Text -> Maybe Country
 decode = flip HM.lookup decodeMap
 
+-- | Decode a 'Country' from a UTF-8-encoded 'ByteString'.
 decodeUtf8 :: ByteString -> Maybe Country
 decodeUtf8 = flip HM.lookup decodeMapUtf8
 
@@ -105,6 +108,7 @@ decodeUtf8 = flip HM.lookup decodeMapUtf8
 parser :: AT.Parser Country
 parser = coerce (trieParser decodeTrie)
 
+-- | Parse a 'Country' using an 'AB.Parser'.
 parserUtf8 :: AB.Parser Country
 parserUtf8 = coerce (trieByteParser decodeTrieUtf8)
 
