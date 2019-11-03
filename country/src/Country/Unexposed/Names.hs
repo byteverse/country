@@ -87,7 +87,7 @@ word16ToInt :: Word16 -> Int
 word16ToInt = fromIntegral
 
 decodeMap :: HashMap Text Country
-decodeMap = 
+decodeMap =
   let baseMap = HM.union alphaTwoHashMap alphaThreeHashMap
       hm1 = L.foldl' (\hm (countryNum,name) -> HM.insert name (Country countryNum) hm) baseMap aliases
       hm2 = L.foldl' (\hm (countryNum,name,_,_) -> HM.insert name (Country countryNum) hm) hm1 countryNameQuads
@@ -121,7 +121,6 @@ instance Enum Country where
   toEnum number = if number >= 0 && number < actualNumberOfCountries
     then Country (indexByteArray sequentialToCountryCodeMapping number)
     else error ("toEnum: cannot convert " ++ show number ++ " to Country")
-
 instance Bounded Country where
   minBound = Country (indexByteArray sequentialToCountryCodeMapping 0)
   maxBound = Country (indexByteArray sequentialToCountryCodeMapping (actualNumberOfCountries - 1))
@@ -148,7 +147,7 @@ sequentialToCountryCodeMapping = runST $ do
 actualNumberOfCountries :: Int
 actualNumberOfCountries = length countryNameQuads
 {-# NOINLINE actualNumberOfCountries #-}
-  
+
 
 codeToEnum :: Word16 -> Int
 codeToEnum w = indexByteArray countryCodeToSequentialMapping (word16ToInt w)
@@ -205,7 +204,7 @@ alphaTwoHashMap = L.foldl'
 
 alphaThreeHashMap :: HashMap Text Country
 alphaThreeHashMap = L.foldl'
-  (\hm (countryNum,_,_,(c1,c2,c3)) -> 
+  (\hm (countryNum,_,_,(c1,c2,c3)) ->
       HM.insert (T.pack [c1,c2,c3]) (Country countryNum)
     $ HM.insert (T.pack [toLower c1, toLower c2, toLower c3]) (Country countryNum)
     $ hm
