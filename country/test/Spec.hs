@@ -8,11 +8,20 @@ import qualified Test.Tasty.QuickCheck as TQC
 import qualified Test.QuickCheck as QC
 
 main :: IO ()
-main = defaultMain $ testGroup "Country"
-  [ lawsToTest (QCC.eqLaws (Proxy :: Proxy Country))
-  , lawsToTest (QCC.ordLaws (Proxy :: Proxy Country))
-  , lawsToTest (QCC.boundedEnumLaws (Proxy :: Proxy Country))
-  ]
+main = defaultMain
+  $ testGroup "Country"
+  $ map lawsToTest
+  $ map ($ proxy)
+  $ [ QCC.boundedEnumLaws
+    , QCC.eqLaws
+    , QCC.ordLaws
+    , QCC.primLaws
+    , QCC.showLaws
+    , QCC.storableLaws
+    ]
+
+proxy :: Proxy Country
+proxy = Proxy
 
 lawsToTest :: QCC.Laws -> TestTree
 lawsToTest (QCC.Laws name pairs) = testGroup name (map (uncurry TQC.testProperty) pairs)
