@@ -11,7 +11,7 @@ main :: IO ()
 main = defaultMain $ testGroup "Country"
   [ lawsToTest (QCC.eqLaws (Proxy :: Proxy Country))
   , lawsToTest (QCC.ordLaws (Proxy :: Proxy Country))
-  , lawsToTest (QCC.enumLaws (Proxy :: Proxy Country))
+  , lawsToTest (QCC.boundedEnumLaws (Proxy :: Proxy Country))
   ]
 
 lawsToTest :: QCC.Laws -> TestTree
@@ -19,5 +19,3 @@ lawsToTest (QCC.Laws name pairs) = testGroup name (map (uncurry TQC.testProperty
 
 instance QC.Arbitrary Country where
   arbitrary = QC.arbitraryBoundedEnum
-
-
