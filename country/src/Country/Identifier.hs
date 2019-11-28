@@ -4,753 +4,1003 @@ module Country.Identifier where
 
 import Country.Unsafe (Country(..))
 
+-- | Afghanistan
 afghanistan :: Country
 afghanistan = Country 4
 
+-- | Aaland Islands; Aland Islands; Åland; Åland Islands
 ålandIslands :: Country
 ålandIslands = Country 248
 
+-- | Albania; Arbanon; Republic of Albania; Republika e Shqipërisë
 albania :: Country
 albania = Country 8
 
+-- | Algeria; Algérie; Dzayer; People's Democratic Republic of Algeria; al Jumhuriyya al Jazaa'iriyya ad-Dīmuqrāţiyya ash Sha'biyya; al-Jazā'ir; الجزائر; ⴷⵣⴰⵢⴻⵔ
 algeria :: Country
 algeria = Country 12
 
+-- | American Samoa
 americanSamoa :: Country
 americanSamoa = Country 16
 
+-- | Andorra
 andorra :: Country
 andorra = Country 20
 
+-- | Angola
 angola :: Country
 angola = Country 24
 
+-- | Anguilla
 anguilla :: Country
 anguilla = Country 660
 
+-- | Antarctica
 antarctica :: Country
 antarctica = Country 10
 
+-- | Antigua and Barbuda
 antiguaAndBarbuda :: Country
 antiguaAndBarbuda = Country 28
 
+-- | Argentina; Argentine Confederation; Argentine Nation; Argentine Republic; La Argentina; The Argentine; United Provinces of the Río de la Plata; la Argentina; the Argentine
 argentina :: Country
 argentina = Country 32
 
+-- | Armenia
 armenia :: Country
 armenia = Country 51
 
+-- | Aruba
 aruba :: Country
 aruba = Country 533
 
+-- | Australia; Commonwealth of Australia; New Holland
 australia :: Country
 australia = Country 36
 
+-- | Austria; Republic of Austria; Republik Österreich; Österreich
 austria :: Country
 austria = Country 40
 
+-- | Azerbaijan
 azerbaijan :: Country
 azerbaijan = Country 31
 
+-- | Bahamas
 bahamas :: Country
 bahamas = Country 44
 
+-- | Bahrain
 bahrain :: Country
 bahrain = Country 48
 
+-- | Bangladesh
 bangladesh :: Country
 bangladesh = Country 50
 
+-- | Barbados
 barbados :: Country
 barbados = Country 52
 
+-- | Belarus
 belarus :: Country
 belarus = Country 112
 
+-- | Belgium
 belgium :: Country
 belgium = Country 56
 
+-- | Belize
 belize :: Country
 belize = Country 84
 
+-- | Benin
 benin :: Country
 benin = Country 204
 
+-- | Bermuda
 bermuda :: Country
 bermuda = Country 60
 
+-- | Bhutan
 bhutan :: Country
 bhutan = Country 64
 
+-- | Bolivia; Bolivia (Plurinational State of); Plurinational State of Bolivia
 boliviaPlurinationalStateOf :: Country
 boliviaPlurinationalStateOf = Country 68
 
+-- | Bonaire, Sint Eustatius and Saba; Bonaire, Sint Eustatius, and Saba
 bonaireSintEustatiusAndSaba :: Country
 bonaireSintEustatiusAndSaba = Country 535
 
+-- | Bosnia and Herzegovina
 bosniaAndHerzegovina :: Country
 bosniaAndHerzegovina = Country 70
 
+-- | Botswana
 botswana :: Country
 botswana = Country 72
 
+-- | Bouvet Island
 bouvetIsland :: Country
 bouvetIsland = Country 74
 
+-- | Brazil; Empire of Brazil; Federative Republic of Brazil; Ilha de Vera Cruz; Pindorama; República Federativa do Brasil; Terra de Santa Cruz; Terra di Papaga; United States of Brazil
 brazil :: Country
 brazil = Country 76
 
+-- | British Indian Ocean Territory
 britishIndianOceanTerritory :: Country
 britishIndianOceanTerritory = Country 86
 
+-- | Brunei; Brunei Darussalam
 bruneiDarussalam :: Country
 bruneiDarussalam = Country 96
 
+-- | Bulgaria
 bulgaria :: Country
 bulgaria = Country 100
 
+-- | Burkina Faso
 burkinaFaso :: Country
 burkinaFaso = Country 854
 
+-- | Burundi
 burundi :: Country
 burundi = Country 108
 
+-- | Cambodia; Democratic Kampuchea; Kingdom of Cambodia; Royaume du Cambodge
 cambodia :: Country
 cambodia = Country 116
 
+-- | Cameroon
 cameroon :: Country
 cameroon = Country 120
 
+-- | Canada
 canada :: Country
 canada = Country 124
 
+-- | Cabo Verde; Cape Verde
 caboVerde :: Country
 caboVerde = Country 132
 
+-- | Cayman Islands
 caymanIslands :: Country
 caymanIslands = Country 136
 
+-- | Central African Republic
 centralAfricanRepublic :: Country
 centralAfricanRepublic = Country 140
 
+-- | Chad
 chad :: Country
 chad = Country 148
 
+-- | Capitania general de Chile; Chile; Chili; Chilli; Republic of Chile; Reyno de Chile
 chile :: Country
 chile = Country 152
 
+-- | China
 china :: Country
 china = Country 156
 
+-- | Christmas Island
 christmasIsland :: Country
 christmasIsland = Country 162
 
+-- | Cocos (Keeling) Islands; Cocos Islands; Cocos [Keeling] Islands; Keeling Islands
 cocosKeelingIslands :: Country
 cocosKeelingIslands = Country 166
 
+-- | Colombia
 colombia :: Country
 colombia = Country 170
 
+-- | Comoros
 comoros :: Country
 comoros = Country 174
 
+-- | Congo; Republic of the Congo
 congo :: Country
 congo = Country 178
 
+-- | Congo (Democratic Republic of the)
 congoDemocraticRepublicOfThe :: Country
 congoDemocraticRepublicOfThe = Country 180
 
+-- | Cook Islands
 cookIslands :: Country
 cookIslands = Country 184
 
+-- | Costa Rica
 costaRica :: Country
 costaRica = Country 188
 
+-- | Côte d'Ivoire; Ivory Coast; Republic of Côte d'Ivoire
 côteDivoire :: Country
 côteDivoire = Country 384
 
+-- | Croatia
 croatia :: Country
 croatia = Country 191
 
+-- | Cuba
 cuba :: Country
 cuba = Country 192
 
+-- | Curaçao
 curaçao :: Country
 curaçao = Country 531
 
+-- | Cyprus
 cyprus :: Country
 cyprus = Country 196
 
+-- | Czech Republic; Czechia; Česko; Česká republika
 czechRepublic :: Country
 czechRepublic = Country 203
 
+-- | Danmark; Denmark; Kingdom of Denmark; Kongeriget Danmark
 denmark :: Country
 denmark = Country 208
 
+-- | Côte française des Somalis, Territoire d'Obock; Djibouti; French Somaliland; French Territory of the Afars and the Issas; Obock Territory; Republic of Djibouti; République de Djibouti; Territoire français des Afars et des Issas
 djibouti :: Country
 djibouti = Country 262
 
+-- | Dominica
 dominica :: Country
 dominica = Country 212
 
+-- | Dominican Republic
 dominicanRepublic :: Country
 dominicanRepublic = Country 214
 
+-- | Ecuador
 ecuador :: Country
 ecuador = Country 218
 
+-- | Aegyptus; Egypt; Meṣr
 egypt :: Country
 egypt = Country 818
 
+-- | El Salvador
 elSalvador :: Country
 elSalvador = Country 222
 
+-- | Equatorial Guinea
 equatorialGuinea :: Country
 equatorialGuinea = Country 226
 
+-- | Eritrea
 eritrea :: Country
 eritrea = Country 232
 
+-- | Estonia
 estonia :: Country
 estonia = Country 233
 
+-- | Ethiopia
 ethiopia :: Country
 ethiopia = Country 231
 
+-- | Falkland Islands; Falkland Islands (Malvinas); Falkland Islands [Malvinas]
 falklandIslandsMalvinas :: Country
 falklandIslandsMalvinas = Country 238
 
+-- | Faroe Islands
 faroeIslands :: Country
 faroeIslands = Country 234
 
+-- | Fiji
 fiji :: Country
 fiji = Country 242
 
+-- | Finland
 finland :: Country
 finland = Country 246
 
+-- | Farança; France; French Republic; La France; République Française
 france :: Country
 france = Country 250
 
+-- | French Guiana
 frenchGuiana :: Country
 frenchGuiana = Country 254
 
+-- | French Polynesia
 frenchPolynesia :: Country
 frenchPolynesia = Country 258
 
+-- | French Southern Territories
 frenchSouthernTerritories :: Country
 frenchSouthernTerritories = Country 260
 
+-- | Gabon
 gabon :: Country
 gabon = Country 266
 
+-- | Gambia
 gambia :: Country
 gambia = Country 270
 
+-- | Georgia
 georgia :: Country
 georgia = Country 268
 
+-- | BRD; Bundesrepublik Deutschland; Deutschland; FRG; Federal Republic of Germany; Germany
 germany :: Country
 germany = Country 276
 
+-- | Ghana
 ghana :: Country
 ghana = Country 288
 
+-- | Gibraltar
 gibraltar :: Country
 gibraltar = Country 292
 
+-- | Greece
 greece :: Country
 greece = Country 300
 
+-- | Greenland
 greenland :: Country
 greenland = Country 304
 
+-- | Grenada
 grenada :: Country
 grenada = Country 308
 
+-- | Guadeloupe
 guadeloupe :: Country
 guadeloupe = Country 312
 
+-- | Guam
 guam :: Country
 guam = Country 316
 
+-- | Guatemala
 guatemala :: Country
 guatemala = Country 320
 
+-- | Guernsey
 guernsey :: Country
 guernsey = Country 831
 
+-- | Guinea
 guinea :: Country
 guinea = Country 324
 
+-- | Guinea-Bissau
 guineabissau :: Country
 guineabissau = Country 624
 
+-- | Guyana
 guyana :: Country
 guyana = Country 328
 
+-- | Haiti
 haiti :: Country
 haiti = Country 332
 
+-- | Heard Island and McDonald Islands
 heardIslandAndMcdonaldIslands :: Country
 heardIslandAndMcdonaldIslands = Country 334
 
+-- | Holy See; Vatican; Vatican City
 holySee :: Country
 holySee = Country 336
 
+-- | Honduras
 honduras :: Country
 honduras = Country 340
 
+-- | Hong Kong
 hongKong :: Country
 hongKong = Country 344
 
+-- | Hungary
 hungary :: Country
 hungary = Country 348
 
+-- | Iceland; Lýðveldið Ísland; Republic of Iceland; Ísafold; Ísland
 iceland :: Country
 iceland = Country 352
 
+-- | Al-Hind; Aryavarta; Bharatham; Bhārat; Bhārat Gaṇarājya; Bhārat Prajatantra; Bhāratadēśaṁ; Bhāratavarṣa; Hind; Hindustan; India; Republic of India; Union of India; ഇന്ത്യ
 india :: Country
 india = Country 356
 
+-- | Indonesia
 indonesia :: Country
 indonesia = Country 360
 
+-- | Faris; Iran; Iran (Islamic Republic of); Islamic Republic of Iran; Persia; The Islamic Republic of Iran
 iranIslamicRepublicOf :: Country
 iranIslamicRepublicOf = Country 364
 
+-- | Assyria; Babylon; Iraq; Mesopotamia
 iraq :: Country
 iraq = Country 368
 
+-- | Ireland; Irish Free State; Republic of Ireland; Saorstát Éireann; Éire
 ireland :: Country
 ireland = Country 372
 
+-- | Isle of Man
 isleOfMan :: Country
 isleOfMan = Country 833
 
+-- | Dawlat Isra'il; Hebrew State; Israel; Jewish State; Medinat Yisra'el; State of Israel; The Hebrew State; The Jewish State; מדינת ישראל; دَوْلَة إِسْرَائِيل
 israel :: Country
 israel = Country 376
 
+-- | Italy; Repubblica Italiana
 italy :: Country
 italy = Country 380
 
+-- | Jamaica; Xamayca
 jamaica :: Country
 jamaica = Country 388
 
+-- | Japan
 japan :: Country
 japan = Country 392
 
+-- | Jersey
 jersey :: Country
 jersey = Country 832
 
+-- | Hashemite Kingdom of Jordan; Jordan
 jordan :: Country
 jordan = Country 400
 
+-- | Kazakh Soviet Socialist Republic; Kazakhstan; Qazaq Keñestik Socïalïstik Respwblïkası; Qazaqstan; Republic of Kazakhstan; Қазақ Кеңестік Социалистік Республикасы; Қазақстан; Қазақстан Республикасы
 kazakhstan :: Country
 kazakhstan = Country 398
 
+-- | Jamhuri ya Kenya; Kenya; Republic of Kenya
 kenya :: Country
 kenya = Country 404
 
+-- | Kiribati
 kiribati :: Country
 kiribati = Country 296
 
+-- | Choson Minjujuui Inmin Konghwaguk; D.P.R.K.; DPRK; Democratic People's Republic of Korea; Korea (Democratic People's Republic of); North Korea; 조선민주주의인민공화국
 koreaDemocraticPeoplesRepublicOf :: Country
 koreaDemocraticPeoplesRepublicOf = Country 408
 
+-- | Korea (Republic of); Republic of Korea; South Korea
 koreaRepublicOf :: Country
 koreaRepublicOf = Country 410
 
+-- | Kuwait
 kuwait :: Country
 kuwait = Country 414
 
+-- | Kyrgyzstan
 kyrgyzstan :: Country
 kyrgyzstan = Country 417
 
+-- | Lao People's Democratic Republic; Laos
 laoPeoplesDemocraticRepublic :: Country
 laoPeoplesDemocraticRepublic = Country 418
 
+-- | Latvia; Latvija; Letland; Letonija; Letonnie; Lettland
 latvia :: Country
 latvia = Country 428
 
+-- | Lebanon
 lebanon :: Country
 lebanon = Country 422
 
+-- | Basutoland; Kingdom of Lesotho; Lesotho
 lesotho :: Country
 lesotho = Country 426
 
+-- | Liberia
 liberia :: Country
 liberia = Country 430
 
+-- | Libya
 libya :: Country
 libya = Country 434
 
+-- | Liechtenstein
 liechtenstein :: Country
 liechtenstein = Country 438
 
+-- | Lietuva; Lithuania; Lithuania, Republic of; Republic of Lithuania; Литва
 lithuania :: Country
 lithuania = Country 440
 
+-- | Grand Duchy of Luxembourg; Grand-Duché de Luxembourg; Groussherzogdem Lëtzebuerg; Großherzogtum Luxemburg; Lussemburgo; Luxembourg; Luxemburg; Luxemburgo
 luxembourg :: Country
 luxembourg = Country 442
 
+-- | Macao
 macao :: Country
 macao = Country 446
 
+-- | Macedonia; Macedonia (the former Yugoslav Republic of)
 macedoniaTheFormerYugoslavRepublicOf :: Country
 macedoniaTheFormerYugoslavRepublicOf = Country 807
 
+-- | Madagascar
 madagascar :: Country
 madagascar = Country 450
 
+-- | Malawi; Nyasaland; Republic of Malawi
 malawi :: Country
 malawi = Country 454
 
+-- | Federation of Malaysia; Malaysia; Mǎláixīyà; Persekutuan Malaysia; 马来西亚
 malaysia :: Country
 malaysia = Country 458
 
+-- | Dhibat-al-Mahal; Dhivehi Raajje; Mahal Dvipa; Maldives; Maléldvipa; Republic of the Maldives; The Maldive Islands; ދިވެހިރާއްޖެ
 maldives :: Country
 maldives = Country 462
 
+-- | Mali
 mali :: Country
 mali = Country 466
 
+-- | Malta
 malta :: Country
 malta = Country 470
 
+-- | Marshall Islands
 marshallIslands :: Country
 marshallIslands = Country 584
 
+-- | Martinique
 martinique :: Country
 martinique = Country 474
 
+-- | Islamic Republic of Mauritania; Mauritania; République Islamique de Mauritanie
 mauritania :: Country
 mauritania = Country 478
 
+-- | Mauritius
 mauritius :: Country
 mauritius = Country 480
 
+-- | Mayotte
 mayotte :: Country
 mayotte = Country 175
 
+-- | Aztlán; Aztlān; Estados Unidos Mexicanos; MX; Mejico; Mexico; Méjico; México; República Mexicana; United Mexican States
 mexico :: Country
 mexico = Country 484
 
+-- | Federated States of Micronesia; Micronesia; Micronesia (Federated States of)
 micronesiaFederatedStatesOf :: Country
 micronesiaFederatedStatesOf = Country 583
 
+-- | Moldova; Moldova (Republic of); Republic of Moldova
 moldovaRepublicOf :: Country
 moldovaRepublicOf = Country 498
 
+-- | Monaco; Principality of Monaco; Principauté de Monaco
 monaco :: Country
 monaco = Country 492
 
+-- | Mongolia
 mongolia :: Country
 mongolia = Country 496
 
+-- | Montenegro; Republic of Singapore; Singapore; Singapura; Yugoslavia
 montenegro :: Country
 montenegro = Country 499
 
+-- | Montserrat
 montserrat :: Country
 montserrat = Country 500
 
+-- | Morocco
 morocco :: Country
 morocco = Country 504
 
+-- | Mozambique
 mozambique :: Country
 mozambique = Country 508
 
+-- | Burma; Myanmar; Myanmar (Burma); Myanmar [Burma]
 myanmar :: Country
 myanmar = Country 104
 
+-- | Namibia
 namibia :: Country
 namibia = Country 516
 
+-- | Nauru
 nauru :: Country
 nauru = Country 520
 
+-- | Nepal
 nepal :: Country
 nepal = Country 524
 
+-- | Netherlands
 netherlands :: Country
 netherlands = Country 528
 
+-- | New Caledonia
 newCaledonia :: Country
 newCaledonia = Country 540
 
+-- | New Zealand
 newZealand :: Country
 newZealand = Country 554
 
+-- | Nicaragua
 nicaragua :: Country
 nicaragua = Country 558
 
+-- | Niger
 niger :: Country
 niger = Country 562
 
+-- | Nigeria
 nigeria :: Country
 nigeria = Country 566
 
+-- | Niue
 niue :: Country
 niue = Country 570
 
+-- | Norfolk Island
 norfolkIsland :: Country
 norfolkIsland = Country 574
 
+-- | Northern Mariana Islands
 northernMarianaIslands :: Country
 northernMarianaIslands = Country 580
 
+-- | Norway
 norway :: Country
 norway = Country 578
 
+-- | Oman
 oman :: Country
 oman = Country 512
 
+-- | Pakistan
 pakistan :: Country
 pakistan = Country 586
 
+-- | Palau
 palau :: Country
 palau = Country 585
 
+-- | Palestine; Palestine, State of
 palestineStateOf :: Country
 palestineStateOf = Country 275
 
+-- | Panama
 panama :: Country
 panama = Country 591
 
+-- | Papua New Guinea
 papuaNewGuinea :: Country
 papuaNewGuinea = Country 598
 
+-- | Paraguay
 paraguay :: Country
 paraguay = Country 600
 
+-- | Peru
 peru :: Country
 peru = Country 604
 
+-- | Philippines
 philippines :: Country
 philippines = Country 608
 
+-- | Pitcairn; Pitcairn Islands
 pitcairn :: Country
 pitcairn = Country 612
 
+-- | Poland
 poland :: Country
 poland = Country 616
 
+-- | Portugal
 portugal :: Country
 portugal = Country 620
 
+-- | Puerto Rico
 puertoRico :: Country
 puertoRico = Country 630
 
+-- | Qatar
 qatar :: Country
 qatar = Country 634
 
+-- | Réunion
 réunion :: Country
 réunion = Country 638
 
+-- | Kingdom of Romania; Regatul României; Republica Populară Romînă; Republica Socialistă România; Romania; Romanian People's Republic; România; Roumania; Rumania; Socialist Republic of Romania
 romania :: Country
 romania = Country 642
 
+-- | Great Russia; R.F.; RF; RSFSR; Rossiya; Rus; Russia; Russian Federation; Russian Socialist Federative Soviet Republic; Russian Soviet Federative Socialist Republic; Russland; SSSR; SU; Sovetskiy Soyuz; Soviet Union; Soyuz Sovetskikh Sotsialisticheskikh Respublik; USSR; Union of Soviet Socialist Republics; Российская Федерация; Россия; СССР; Сове́тский Сою́з; Союз Советских Социалистических Республик
 russianFederation :: Country
 russianFederation = Country 643
 
+-- | Republic of Rwanda; Repubulika y'u Rwanda; Ruanda; Rwanda; Rwandese Republic; République du Rwanda
 rwanda :: Country
 rwanda = Country 646
 
+-- | Saint Barthélemy; Saint-Barthélemy
 saintBarthélemy :: Country
 saintBarthélemy = Country 652
 
+-- | Saint Helena; Saint Helena, Ascension and Tristan da Cunha
 saintHelenaAscensionAndTristanDaCunha :: Country
 saintHelenaAscensionAndTristanDaCunha = Country 654
 
+-- | Federation of Saint Kitts and Nevis; Saint Kitts and Nevis; Saint Kitts-Nevis-Anguilla; St Kitts and Nevis; St. Kitts and Nevis
 saintKittsAndNevis :: Country
 saintKittsAndNevis = Country 659
 
+-- | Saint Lucia
 saintLucia :: Country
 saintLucia = Country 662
 
+-- | Saint Martin; Saint Martin (French part); St Martin; St. Martin
 saintMartinFrenchPart :: Country
 saintMartinFrenchPart = Country 663
 
+-- | Saint Pierre and Miquelon
 saintPierreAndMiquelon :: Country
 saintPierreAndMiquelon = Country 666
 
+-- | Saint Vincent and the Grenadines
 saintVincentAndTheGrenadines :: Country
 saintVincentAndTheGrenadines = Country 670
 
+-- | Samoa
 samoa :: Country
 samoa = Country 882
 
+-- | San Marino
 sanMarino :: Country
 sanMarino = Country 674
 
+-- | Sao Tome and Principe; São Tomé and Príncipe
 saoTomeAndPrincipe :: Country
 saoTomeAndPrincipe = Country 678
 
+-- | Saudi Arabia
 saudiArabia :: Country
 saudiArabia = Country 682
 
+-- | Senegal
 senegal :: Country
 senegal = Country 686
 
+-- | Serbia
 serbia :: Country
 serbia = Country 688
 
+-- | Seychelles
 seychelles :: Country
 seychelles = Country 690
 
+-- | Sierra Leone
 sierraLeone :: Country
 sierraLeone = Country 694
 
+-- | Montenegro; Republic of Singapore; Singapore; Singapura; Yugoslavia
 singapore :: Country
 singapore = Country 702
 
+-- | Sint Maarten; Sint Maarten (Dutch part)
 sintMaartenDutchPart :: Country
 sintMaartenDutchPart = Country 534
 
+-- | Slovakia
 slovakia :: Country
 slovakia = Country 703
 
+-- | Slovenia
 slovenia :: Country
 slovenia = Country 705
 
+-- | Solomon Islands
 solomonIslands :: Country
 solomonIslands = Country 90
 
+-- | Somalia
 somalia :: Country
 somalia = Country 706
 
+-- | South Africa
 southAfrica :: Country
 southAfrica = Country 710
 
+-- | South Georgia and the South Sandwich Islands
 southGeorgiaAndTheSouthSandwichIslands :: Country
 southGeorgiaAndTheSouthSandwichIslands = Country 239
 
+-- | Republic of South Sudan; South Sudan
 southSudan :: Country
 southSudan = Country 728
 
+-- | Espainia; Espanya; España; Hispania; Iberia; Reino de España; Spain; Spanish State
 spain :: Country
 spain = Country 724
 
+-- | Sri Lanka
 sriLanka :: Country
 sriLanka = Country 144
 
+-- | Nubia; Republic of the Sudan; Sudan; The Sudan
 sudan :: Country
 sudan = Country 729
 
+-- | Dutch Guiana; Netherlands Guiana; Republic of Suriname; Republiek Suriname; Surinam; Suriname
 suriname :: Country
 suriname = Country 740
 
+-- | Svalbard and Jan Mayen
 svalbardAndJanMayen :: Country
 svalbardAndJanMayen = Country 744
 
+-- | Swaziland
 swaziland :: Country
 swaziland = Country 748
 
+-- | Kingdom of Sweden; Konungariket Sverige; Svea Rike; Sverige; Svitjod; Sweden
 sweden :: Country
 sweden = Country 752
 
+-- | CH; Confederazione Svizzera; Confederaziun Svizra; Confoederatio Helvetica; Confédération suisse; Helvetia; Schweiz; Schweizerische Eidgenossenschaft; Suisse; Svizra; Svizzera; Swiss Confederation; Switzerland
 switzerland :: Country
 switzerland = Country 756
 
+-- | Syria; Syrian Arab Republic
 syrianArabRepublic :: Country
 syrianArabRepublic = Country 760
 
+-- | Chinese Taipei; People's Republic of China; Republic of China; Separate Customs Territory of Taiwan, Penghu, Kinmen and Matsu; Taiwan; Taiwan, Province of China; The People's Republic of China; Zhonggua Taipei; 中華台北
 taiwanProvinceOfChina :: Country
 taiwanProvinceOfChina = Country 158
 
+-- | Tajikistan
 tajikistan :: Country
 tajikistan = Country 762
 
+-- | Tanzania; Tanzania, United Republic of; United Republic of Tanganyika and Zanzibar
 tanzaniaUnitedRepublicOf :: Country
 tanzaniaUnitedRepublicOf = Country 834
 
+-- | Thailand
 thailand :: Country
 thailand = Country 764
 
+-- | Democratic Republic of Timor-Leste; Timor-Leste
 timorleste :: Country
 timorleste = Country 626
 
+-- | Togo
 togo :: Country
 togo = Country 768
 
+-- | Tokelau
 tokelau :: Country
 tokelau = Country 772
 
+-- | Tonga
 tonga :: Country
 tonga = Country 776
 
+-- | Republic of Trinidad and Tobago; Trinbago; Trinidad and Tobago
 trinidadAndTobago :: Country
 trinidadAndTobago = Country 780
 
+-- | Tunisia
 tunisia :: Country
 tunisia = Country 788
 
+-- | Ottoman Empire; Republic of Turkey; Turkey; Turkish Empire; Türkiye Cumhuriyeti
 turkey :: Country
 turkey = Country 792
 
+-- | Turkmenistan
 turkmenistan :: Country
 turkmenistan = Country 795
 
+-- | Turks and Caicos Islands
 turksAndCaicosIslands :: Country
 turksAndCaicosIslands = Country 796
 
+-- | Tuvalu
 tuvalu :: Country
 tuvalu = Country 798
 
+-- | Uganda
 uganda :: Country
 uganda = Country 800
 
+-- | UA; UKR; Ukraine; Ukraїna
 ukraine :: Country
 ukraine = Country 804
 
+-- | Al Emirat al Arabbiya al Muttahida; U.A.E.; UAE; United Arab Emirates
 unitedArabEmirates :: Country
 unitedArabEmirates = Country 784
 
+-- | United Kingdom; United Kingdom of Great Britain and Northern Ireland
 unitedKingdomOfGreatBritainAndNorthernIreland :: Country
 unitedKingdomOfGreatBritainAndNorthernIreland = Country 826
 
+-- | Estados Unidos de América; The United States; U.S.; U.S.A.; USA; United States; United States of America; Usa; Usono
 unitedStatesOfAmerica :: Country
 unitedStatesOfAmerica = Country 840
 
+-- | U.S. Minor Outlying Islands; United States Minor Outlying Islands
 unitedStatesMinorOutlyingIslands :: Country
 unitedStatesMinorOutlyingIslands = Country 581
 
+-- | Uruguay
 uruguay :: Country
 uruguay = Country 858
 
+-- | Uzbekistan
 uzbekistan :: Country
 uzbekistan = Country 860
 
+-- | Ripablik blong Vanuatu; République de Vanuatu; Vanuatu
 vanuatu :: Country
 vanuatu = Country 548
 
+-- | Bolivarian Republic of Venezuela; República Bolivariana de Venezuela; Venezuela; Venezuela (Bolivarian Republic of)
 venezuelaBolivarianRepublicOf :: Country
 venezuelaBolivarianRepublicOf = Country 862
 
+-- | Cộng hòa Xã hội Chủ nghĩa Việt Nam; Viet Nam; Vietnam; Việt Nam
 vietNam :: Country
 vietNam = Country 704
 
+-- | British Virgin Islands; Virgin Islands (British)
 virginIslandsBritish :: Country
 virginIslandsBritish = Country 92
 
+-- | U.S. Virgin Islands; Virgin Islands (U.S.)
 virginIslandsUs :: Country
 virginIslandsUs = Country 850
 
+-- | Wallis and Futuna
 wallisAndFutuna :: Country
 wallisAndFutuna = Country 876
 
+-- | Western Sahara
 westernSahara :: Country
 westernSahara = Country 732
 
+-- | Yemen
 yemen :: Country
 yemen = Country 887
 
+-- | Republic of Zambia; Zambia
 zambia :: Country
 zambia = Country 894
 
+-- | Republic of Zimbabwe; Zimbabwe
 zimbabwe :: Country
 zimbabwe = Country 716
 
+-- | Kosovo
 kosovo :: Country
 kosovo = Country 383
 
