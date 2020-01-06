@@ -13,6 +13,7 @@ module Country
   , encodeEnglish
   , decode
   , decodeUtf8
+  , decodeUtf8Bytes
   , parser
   , parserUtf8
     -- * Alpha-2 and Alpha-3
@@ -27,6 +28,7 @@ module Country
 import Country.Unsafe (Country(..))
 import Country.Unexposed.Encode.English (countryNameQuads)
 import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish)
+import Country.Unexposed.Names (decodeUtf16BytesHashMap,decodeUtf8BytesHashMap)
 import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
 import Country.Unexposed.TrieByte (TrieByte,trieByteFromList,trieByteParser)
 import Data.Text (Text)
@@ -41,12 +43,14 @@ import Control.Monad
 import Data.Char (ord,chr,toLower)
 import Data.Bits (unsafeShiftL,unsafeShiftR)
 import Data.Coerce (coerce)
+import Data.Bytes.Types (Bytes(Bytes))
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text.Array as TA
 import qualified Data.Text.Encoding as TE
 import qualified Data.Text.Internal as TI
 import qualified Data.Attoparsec.Text as AT
 import qualified Data.Attoparsec.ByteString as AB
+import qualified Data.Bytes.HashMap.Word as BytesHashMap
 
 -- | Convert a country to its numeric code. This is a
 --   three-digit number and will consequently be less than 1000.
@@ -91,14 +95,21 @@ timesThree x = x * 3
 --   and is very generous with what it accepts. It handles official
 --   names, colloquial names, acroynms, and obsolete names for many
 --   countries. It strives to handle any source language. Open an
---   issue on the issue tracker if their are names that are
---   missing.
+--   issue on the issue tracker if their are names that are missing.
 decode :: Text -> Maybe Country
-decode = flip HM.lookup decodeMap
+decode (TI.Text (TA.Array arr) off16 len16) =
+  case (BytesHashMap.lookup (Bytes (ByteArray arr) (off16 * 2) (len16 * 2)) decodeUtf16BytesHashMap) of
+    Nothing -> Nothing
+    Just w -> Just (Country (fromIntegral w))
 
 -- | Decode a 'Country' from a UTF-8-encoded 'ByteString'.
 decodeUtf8 :: ByteString -> Maybe Country
 decodeUtf8 = flip HM.lookup decodeMapUtf8
+
+decodeUtf8Bytes :: Bytes -> Maybe Country
+decodeUtf8Bytes !bs = case (BytesHashMap.lookup bs decodeUtf8BytesHashMap) of
+  Nothing -> Nothing
+  Just w -> Just (Country (fromIntegral w))
 
 -- | Parse a country from its name using an attoparsec text parser. This
 --   function is language-agnostic and can handle any source language.
