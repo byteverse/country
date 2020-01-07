@@ -72,8 +72,8 @@ alphaTwoUpper c = TI.text allAlphaTwoUpper (timesTwo (indexOfCountry c)) 2
 -- | The alpha-2 country code, uppercase. The resulting address always
 -- has two bytes at it.
 alphaTwoUpperUtf8Ptr :: Country -> Ptr Word8
-alphaTwoUpperUtf8Ptr c =
-  plusPtr alphaTwoPtr (timesTwo (indexOfCountry c))
+alphaTwoUpperUtf8Ptr (Country c) =
+  plusPtr alphaTwoPtr (2 * fromIntegral c)
 
 alphaTwoUpperUtf8BoundedBuilder :: Country -> BBU.Builder 2
 alphaTwoUpperUtf8BoundedBuilder !c = BBU.construct

@@ -75,12 +75,14 @@ test-suite test
   hs-source-dirs: test
   main-is: Spec.hs
   build-depends:
+    , QuickCheck
     , base
     , country
+    , primitive
+    , quickcheck-classes >=0.6.4
     , tasty
     , tasty-quickcheck
-    , quickcheck-classes >=0.6.4
-    , QuickCheck
+    , text
   ghc-options: -O2
   default-language: Haskell2010
 

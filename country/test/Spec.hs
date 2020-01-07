@@ -1,9 +1,13 @@
 import Country (Country)
+import Data.Char (ord)
+import Data.Primitive.Ptr (indexOffPtr)
 import Data.Proxy (Proxy(..))
+import Data.Word (Word8)
 import Test.Tasty (defaultMain,testGroup,TestTree)
 import Test.Tasty.QuickCheck (testProperty,(===))
 
 import qualified Country
+import qualified Data.Text as Text
 import qualified Test.QuickCheck as QC
 import qualified Test.QuickCheck.Classes as QCC
 import qualified Test.QuickCheck.Classes.IsList as QCCL
@@ -31,7 +35,19 @@ main = defaultMain $ testGroup "Country" $
       (\x -> Just x === Country.decode (Country.alphaTwoLower x))
   , testProperty "encode-decode-alpha-3-lower"
       (\x -> Just x === Country.decode (Country.alphaThreeLower x))
+  , testProperty "encode-alpha-two-upper"
+      (\x ->
+        let t = Country.alphaTwoUpper x
+            ptr = Country.alphaTwoUpperUtf8Ptr x
+        in
+        (c2w (Text.index t 0), c2w (Text.index t 1))
+        ===
+        (indexOffPtr ptr 0 :: Word8, indexOffPtr ptr 1 :: Word8)
+      )
   ]
+
+c2w :: Char -> Word8
+c2w = fromIntegral . ord
 
 proxy :: Proxy Country
 proxy = Proxy
