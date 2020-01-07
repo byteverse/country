@@ -1,4 +1,5 @@
 {-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE MagicHash #-}
 
 {-# OPTIONS_GHC -Wall #-}
@@ -18,6 +19,8 @@ module Country
   , parserUtf8
     -- * Alpha-2 and Alpha-3
   , alphaTwoUpper
+  , alphaTwoUpperUtf8Ptr
+  , alphaTwoUpperUtf8BoundedBuilder
   , alphaThreeUpper
   , alphaThreeLower
   , alphaTwoLower
@@ -26,6 +29,7 @@ module Country
   ) where
 
 import Country.Unsafe (Country(..))
+import Country.Unexposed.AlphaTwoPtr (alphaTwoPtr)
 import Country.Unexposed.Encode.English (countryNameQuads)
 import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish)
 import Country.Unexposed.Names (decodeUtf16BytesHashMap,decodeUtf8BytesHashMap)
@@ -33,6 +37,7 @@ import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
 import Country.Unexposed.TrieByte (TrieByte,trieByteFromList,trieByteParser)
 import Data.Text (Text)
 import Data.ByteString (ByteString)
+import Data.Primitive.Ptr (indexOffPtr)
 import Data.Word (Word16)
 import Data.Primitive (writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
 import Data.Primitive.ByteArray (ByteArray(..))
@@ -44,6 +49,9 @@ import Data.Char (ord,chr,toLower)
 import Data.Bits (unsafeShiftL,unsafeShiftR)
 import Data.Coerce (coerce)
 import Data.Bytes.Types (Bytes(Bytes))
+import Data.Word (Word8)
+import Foreign.Ptr (Ptr,plusPtr)
+import qualified Data.ByteArray.Builder.Bounded.Unsafe as BBU
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text.Array as TA
 import qualified Data.Text.Encoding as TE
@@ -60,6 +68,21 @@ encodeNumeric (Country n) = n
 -- | The alpha-2 country code, uppercase
 alphaTwoUpper :: Country -> Text
 alphaTwoUpper c = TI.text allAlphaTwoUpper (timesTwo (indexOfCountry c)) 2
+
+-- | The alpha-2 country code, uppercase. The resulting address always
+-- has two bytes at it.
+alphaTwoUpperUtf8Ptr :: Country -> Ptr Word8
+alphaTwoUpperUtf8Ptr c =
+  plusPtr alphaTwoPtr (timesTwo (indexOfCountry c))
+
+alphaTwoUpperUtf8BoundedBuilder :: Country -> BBU.Builder 2
+alphaTwoUpperUtf8BoundedBuilder !c = BBU.construct
+  (\arr ix -> do
+    let ptr = alphaTwoUpperUtf8Ptr c
+    writeByteArray arr ix (indexOffPtr ptr 0)
+    writeByteArray arr (ix + 1) (indexOffPtr ptr 1)
+    pure (ix + 2)
+  )
 
 -- | The alpha-3 country code, uppercase
 alphaThreeUpper :: Country -> Text
