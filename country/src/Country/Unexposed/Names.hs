@@ -52,9 +52,11 @@ import Data.Primitive (Array,indexArray,newArray,unsafeFreezeArray,writeArray,
 import qualified Data.Text as T
 import qualified Data.Scientific as SCI
 import qualified GHC.Exts as Exts
+import qualified System.IO as IO
 import GHC.Generics (Generic)
 import Data.Data
 import Data.Bytes.Types (Bytes(Bytes))
+import System.IO.Unsafe (unsafePerformIO)
 
 import qualified Data.Bytes as Bytes
 import qualified Data.Bytes.HashMap.Word as BytesHashMap
@@ -102,20 +104,25 @@ decodeMap = HM.fromList (map (\(a,b) -> (b,Country a)) countryPairs)
 
 decodeUtf8BytesHashMap :: BytesHashMap.Map
 {-# NOINLINE decodeUtf8BytesHashMap #-}
-decodeUtf8BytesHashMap = BytesHashMap.fromList
-  ( map
-    (\(a,t) -> (Exts.fromList (ByteString.unpack (encodeUtf8 t)),fromIntegral a)
-    ) countryPairs
-  )
+decodeUtf8BytesHashMap = unsafePerformIO $ IO.withFile "/dev/urandom" IO.ReadMode $ \h ->
+  BytesHashMap.fromList h
+    ( map
+      (\(a,t) -> (Exts.fromList (ByteString.unpack (encodeUtf8 t)),fromIntegral a)
+      ) countryPairs
+    )
 
+-- I'm so sorry to Windows users and to anyone who appreciates just how
+-- sad this hack is. Maybe I can get rid of this if GHC ever supports
+-- casing with ByteArray literals.
 decodeUtf16BytesHashMap :: BytesHashMap.Map
 {-# NOINLINE decodeUtf16BytesHashMap #-}
-decodeUtf16BytesHashMap = BytesHashMap.fromList
-  ( map
-    (\(a,Text.Text (Text.Array arr) off16 len16) ->
-      (Bytes (ByteArray arr) (off16 * 2) (len16 * 2),fromIntegral a)
-    ) countryPairs
-  )
+decodeUtf16BytesHashMap = unsafePerformIO $ IO.withFile "/dev/urandom" IO.ReadMode $ \h ->
+  BytesHashMap.fromList h
+    ( map
+      (\(a,Text.Text (Text.Array arr) off16 len16) ->
+        (Bytes (ByteArray arr) (off16 * 2) (len16 * 2),fromIntegral a)
+      ) countryPairs
+    )
 
 countryPairs :: [(Word16,Text)]
 {-# NOINLINE countryPairs #-}
