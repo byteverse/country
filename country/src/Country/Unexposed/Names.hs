@@ -56,7 +56,9 @@ import qualified System.IO as IO
 import GHC.Generics (Generic)
 import Data.Data
 import Data.Bytes.Types (Bytes(Bytes))
+import Control.Exception (bracket)
 import System.IO.Unsafe (unsafePerformIO)
+import System.Entropy (openHandle,closeHandle)
 
 import qualified Data.Bytes as Bytes
 import qualified Data.Bytes.HashMap.Word as BytesHashMap
@@ -104,19 +106,19 @@ decodeMap = HM.fromList (map (\(a,b) -> (b,Country a)) countryPairs)
 
 decodeUtf8BytesHashMap :: BytesHashMap.Map
 {-# NOINLINE decodeUtf8BytesHashMap #-}
-decodeUtf8BytesHashMap = unsafePerformIO $ IO.withFile "/dev/urandom" IO.ReadMode $ \h ->
+decodeUtf8BytesHashMap = unsafePerformIO $ bracket openHandle closeHandle $ \h ->
   BytesHashMap.fromList h
     ( map
       (\(a,t) -> (Exts.fromList (ByteString.unpack (encodeUtf8 t)),fromIntegral a)
       ) countryPairs
     )
 
--- I'm so sorry to Windows users and to anyone who appreciates just how
--- sad this hack is. Maybe I can get rid of this if GHC ever supports
--- casing with ByteArray literals.
+-- It is a hack to pull from a source of randomness in here, but whatever.
+-- Maybe I can get rid of this if GHC ever supports casing on values of
+-- type ByteArray# along with good codegen for it.
 decodeUtf16BytesHashMap :: BytesHashMap.Map
 {-# NOINLINE decodeUtf16BytesHashMap #-}
-decodeUtf16BytesHashMap = unsafePerformIO $ IO.withFile "/dev/urandom" IO.ReadMode $ \h ->
+decodeUtf16BytesHashMap = unsafePerformIO $ bracket openHandle closeHandle $ \h ->
   BytesHashMap.fromList h
     ( map
       (\(a,Text.Text (Text.Array arr) off16 len16) ->
