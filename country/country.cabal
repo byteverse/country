@@ -58,6 +58,7 @@ library
     , aeson >= 0.11 && < 1.6
     , attoparsec >=0.13 && <0.14
     , base >=4.12 && <5
+    , bytebuild >=0.3.4 && <0.4
     , bytehash >=0.1 && <0.2
     , byteslice >=0.1.4 && <0.3
     , bytestring >= 0.10 && <0.12

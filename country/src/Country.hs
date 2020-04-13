@@ -51,7 +51,7 @@ import Data.Coerce (coerce)
 import Data.Bytes.Types (Bytes(Bytes))
 import Data.Word (Word8)
 import Foreign.Ptr (Ptr,plusPtr)
-import qualified Data.ByteArray.Builder.Bounded.Unsafe as BBU
+import qualified Data.Bytes.Builder.Bounded.Unsafe as BBU
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text.Array as TA
 import qualified Data.Text.Encoding as TE
