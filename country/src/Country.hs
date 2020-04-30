@@ -26,13 +26,16 @@ module Country
   , alphaTwoLower
   , decodeAlphaTwo
   , decodeAlphaThree
+    -- * Hash Maps for Decoding
+  , hashMapUtf8
+  , hashMapUtf16
   ) where
 
 import Country.Unsafe (Country(..))
 import Country.Unexposed.AlphaTwoPtr (alphaTwoPtr)
 import Country.Unexposed.Encode.English (countryNameQuads)
 import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish)
-import Country.Unexposed.Names (decodeUtf16BytesHashMap,decodeUtf8BytesHashMap)
+import Country.Unexposed.Names (hashMapUtf16,hashMapUtf8)
 import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
 import Country.Unexposed.TrieByte (TrieByte,trieByteFromList,trieByteParser)
 import Data.Text (Text)
@@ -121,7 +124,7 @@ timesThree x = x * 3
 --   issue on the issue tracker if their are names that are missing.
 decode :: Text -> Maybe Country
 decode (TI.Text (TA.Array arr) off16 len16) =
-  case (BytesHashMap.lookup (Bytes (ByteArray arr) (off16 * 2) (len16 * 2)) decodeUtf16BytesHashMap) of
+  case (BytesHashMap.lookup (Bytes (ByteArray arr) (off16 * 2) (len16 * 2)) hashMapUtf16) of
     Nothing -> Nothing
     Just w -> Just (Country (fromIntegral w))
 
@@ -130,7 +133,7 @@ decodeUtf8 :: ByteString -> Maybe Country
 decodeUtf8 = flip HM.lookup decodeMapUtf8
 
 decodeUtf8Bytes :: Bytes -> Maybe Country
-decodeUtf8Bytes !bs = case (BytesHashMap.lookup bs decodeUtf8BytesHashMap) of
+decodeUtf8Bytes !bs = case (BytesHashMap.lookup bs hashMapUtf8) of
   Nothing -> Nothing
   Just w -> Just (Country (fromIntegral w))
 

@@ -14,8 +14,8 @@ module Country.Unexposed.Names
   , englishIdentifierNamesText
   , numberOfPossibleCodes
   , decodeMap
-  , decodeUtf8BytesHashMap
-  , decodeUtf16BytesHashMap
+  , hashMapUtf8
+  , hashMapUtf16
   , decodeMapUtf8
   , alphaTwoHashMap
   , alphaThreeHashMap
@@ -104,27 +104,23 @@ decodeMap :: HashMap Text Country
 {-# NOINLINE decodeMap #-}
 decodeMap = HM.fromList (map (\(a,b) -> (b,Country a)) countryPairs)
 
-decodeUtf8BytesHashMap :: BytesHashMap.Map
-{-# NOINLINE decodeUtf8BytesHashMap #-}
-decodeUtf8BytesHashMap = unsafePerformIO $ bracket openHandle closeHandle $ \h ->
-  BytesHashMap.fromList h
-    ( map
-      (\(a,t) -> (Exts.fromList (ByteString.unpack (encodeUtf8 t)),fromIntegral a)
-      ) countryPairs
-    )
+hashMapUtf8 :: BytesHashMap.Map
+hashMapUtf8 = BytesHashMap.fromTrustedList
+  ( map
+    (\(a,t) -> (Exts.fromList (ByteString.unpack (encodeUtf8 t)),fromIntegral a)
+    ) countryPairs
+  )
 
 -- It is a hack to pull from a source of randomness in here, but whatever.
 -- Maybe I can get rid of this if GHC ever supports casing on values of
 -- type ByteArray# along with good codegen for it.
-decodeUtf16BytesHashMap :: BytesHashMap.Map
-{-# NOINLINE decodeUtf16BytesHashMap #-}
-decodeUtf16BytesHashMap = unsafePerformIO $ bracket openHandle closeHandle $ \h ->
-  BytesHashMap.fromList h
-    ( map
-      (\(a,Text.Text (Text.Array arr) off16 len16) ->
-        (Bytes (ByteArray arr) (off16 * 2) (len16 * 2),fromIntegral a)
-      ) countryPairs
-    )
+hashMapUtf16 :: BytesHashMap.Map
+hashMapUtf16 = BytesHashMap.fromTrustedList
+  ( map
+    (\(a,Text.Text (Text.Array arr) off16 len16) ->
+      (Bytes (ByteArray arr) (off16 * 2) (len16 * 2),fromIntegral a)
+    ) countryPairs
+  )
 
 countryPairs :: [(Word16,Text)]
 {-# NOINLINE countryPairs #-}
