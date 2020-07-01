@@ -34,7 +34,7 @@ import Data.ByteString (ByteString)
 import Data.Word (Word16)
 import Data.Primitive (writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
 import Data.Primitive.ByteArray (ByteArray(..))
-import GHC.Prim (sizeofByteArray#)
+import GHC.Exts (sizeofByteArray#)
 import GHC.Int (Int(..))
 import Control.Monad.ST (runST)
 import Control.Monad
