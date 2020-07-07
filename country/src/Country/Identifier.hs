@@ -204,7 +204,7 @@ colombia = Country 170
 comoros :: Country
 comoros = Country 174
 
--- | Congo; Republic of the Congo
+-- | Congo; DR Congo; Democratic Republic of the Congo; Republic of the Congo
 congo :: Country
 congo = Country 178
 
