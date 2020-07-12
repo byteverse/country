@@ -1,5 +1,7 @@
 # country
 
+[![Build Status](https://travis-ci.org/andrewthad/country.svg?branch=master)](https://travis-ci.org/andrewthad/country)
+
 This is a mega-repo with two projects:
 
 - `country`: A library for dealing with countries, country codes, etc.
