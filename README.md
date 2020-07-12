@@ -1,6 +1,6 @@
 # country
 
-[![Build Status](https://travis-ci.org/andrewthad/country.svg?branch=master)](https://travis-ci.org/andrewthad/country)
+[![Build Status](https://travis-ci.org/andrewthad/country.svg?branch=master&status=started)](https://travis-ci.org/github/andrewthad/country)
 
 This is a mega-repo with two projects:
 
