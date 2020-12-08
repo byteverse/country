@@ -1,4 +1,5 @@
 {-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE MagicHash #-}
 
 {-# OPTIONS_GHC -Wall #-}
@@ -13,24 +14,33 @@ module Country
   , encodeEnglish
   , decode
   , decodeUtf8
+  , decodeUtf8Bytes
   , parser
   , parserUtf8
     -- * Alpha-2 and Alpha-3
   , alphaTwoUpper
+  , alphaTwoUpperUtf8Ptr
+  , alphaTwoUpperUtf8BoundedBuilder
   , alphaThreeUpper
   , alphaThreeLower
   , alphaTwoLower
   , decodeAlphaTwo
   , decodeAlphaThree
+    -- * Hash Maps for Decoding
+  , hashMapUtf8
+  , hashMapUtf16
   ) where
 
 import Country.Unsafe (Country(..))
+import Country.Unexposed.AlphaTwoPtr (alphaTwoPtr)
 import Country.Unexposed.Encode.English (countryNameQuads)
 import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish)
+import Country.Unexposed.Names (hashMapUtf16,hashMapUtf8)
 import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
 import Country.Unexposed.TrieByte (TrieByte,trieByteFromList,trieByteParser)
 import Data.Text (Text)
 import Data.ByteString (ByteString)
+import Data.Primitive.Ptr (indexOffPtr)
 import Data.Word (Word16)
 import Data.Primitive (writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
 import Data.Primitive.ByteArray (ByteArray(..))
@@ -41,12 +51,17 @@ import Control.Monad
 import Data.Char (ord,chr,toLower)
 import Data.Bits (unsafeShiftL,unsafeShiftR)
 import Data.Coerce (coerce)
+import Data.Bytes.Types (Bytes(Bytes))
+import Data.Word (Word8)
+import Foreign.Ptr (Ptr,plusPtr)
+import qualified Data.Bytes.Builder.Bounded.Unsafe as BBU
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text.Array as TA
 import qualified Data.Text.Encoding as TE
 import qualified Data.Text.Internal as TI
 import qualified Data.Attoparsec.Text as AT
 import qualified Data.Attoparsec.ByteString as AB
+import qualified Data.Bytes.HashMap.Word as BytesHashMap
 
 -- | Convert a country to its numeric code. This is a
 --   three-digit number and will consequently be less than 1000.
@@ -56,6 +71,21 @@ encodeNumeric (Country n) = n
 -- | The alpha-2 country code, uppercase
 alphaTwoUpper :: Country -> Text
 alphaTwoUpper c = TI.text allAlphaTwoUpper (timesTwo (indexOfCountry c)) 2
+
+-- | The alpha-2 country code, uppercase. The resulting address always
+-- has two bytes at it.
+alphaTwoUpperUtf8Ptr :: Country -> Ptr Word8
+alphaTwoUpperUtf8Ptr (Country c) =
+  plusPtr alphaTwoPtr (2 * fromIntegral c)
+
+alphaTwoUpperUtf8BoundedBuilder :: Country -> BBU.Builder 2
+alphaTwoUpperUtf8BoundedBuilder !c = BBU.construct
+  (\arr ix -> do
+    let ptr = alphaTwoUpperUtf8Ptr c
+    writeByteArray arr ix (indexOffPtr ptr 0)
+    writeByteArray arr (ix + 1) (indexOffPtr ptr 1)
+    pure (ix + 2)
+  )
 
 -- | The alpha-3 country code, uppercase
 alphaThreeUpper :: Country -> Text
@@ -91,14 +121,21 @@ timesThree x = x * 3
 --   and is very generous with what it accepts. It handles official
 --   names, colloquial names, acroynms, and obsolete names for many
 --   countries. It strives to handle any source language. Open an
---   issue on the issue tracker if their are names that are
---   missing.
+--   issue on the issue tracker if their are names that are missing.
 decode :: Text -> Maybe Country
-decode = flip HM.lookup decodeMap
+decode (TI.Text (TA.Array arr) off16 len16) =
+  case (BytesHashMap.lookup (Bytes (ByteArray arr) (off16 * 2) (len16 * 2)) hashMapUtf16) of
+    Nothing -> Nothing
+    Just w -> Just (Country (fromIntegral w))
 
 -- | Decode a 'Country' from a UTF-8-encoded 'ByteString'.
 decodeUtf8 :: ByteString -> Maybe Country
 decodeUtf8 = flip HM.lookup decodeMapUtf8
+
+decodeUtf8Bytes :: Bytes -> Maybe Country
+decodeUtf8Bytes !bs = case (BytesHashMap.lookup bs hashMapUtf8) of
+  Nothing -> Nothing
+  Just w -> Just (Country (fromIntegral w))
 
 -- | Parse a country from its name using an attoparsec text parser. This
 --   function is language-agnostic and can handle any source language.

@@ -14,6 +14,8 @@ module Country.Unexposed.Names
   , englishIdentifierNamesText
   , numberOfPossibleCodes
   , decodeMap
+  , hashMapUtf8
+  , hashMapUtf16
   , decodeMapUtf8
   , alphaTwoHashMap
   , alphaThreeHashMap
@@ -49,8 +51,20 @@ import Data.Primitive (Array,indexArray,newArray,unsafeFreezeArray,writeArray,
   writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray,sizeOf)
 import qualified Data.Text as T
 import qualified Data.Scientific as SCI
+import qualified GHC.Exts as Exts
+import qualified System.IO as IO
 import GHC.Generics (Generic)
 import Data.Data
+import Data.Bytes.Types (Bytes(Bytes))
+import Control.Exception (bracket)
+import System.IO.Unsafe (unsafePerformIO)
+import System.Entropy (openHandle,closeHandle)
+
+import qualified Data.Bytes as Bytes
+import qualified Data.Bytes.HashMap.Word as BytesHashMap
+import qualified Data.Text.Internal as Text
+import qualified Data.Text.Array as Text
+import qualified Data.ByteString as ByteString
 
 -- | The name of a country given in English
 encodeEnglish :: Country -> Text
@@ -87,13 +101,40 @@ word16ToInt :: Word16 -> Int
 word16ToInt = fromIntegral
 
 decodeMap :: HashMap Text Country
-decodeMap =
-  let baseMap = HM.union alphaTwoHashMap alphaThreeHashMap
-      hm1 = L.foldl' (\hm (countryNum,name) -> HM.insert name (Country countryNum) hm) baseMap aliases
-      hm2 = L.foldl' (\hm (countryNum,name,_,_) -> HM.insert name (Country countryNum) hm) hm1 countryNameQuads
-      hm3 = HM.foldlWithKey' (\hm name cty -> HM.insert (T.toLower name) cty $ HM.insert (slowToTitle name) cty $ hm) hm2 hm2
-   in hm3
 {-# NOINLINE decodeMap #-}
+decodeMap = HM.fromList (map (\(a,b) -> (b,Country a)) countryPairs)
+
+hashMapUtf8 :: BytesHashMap.Map
+hashMapUtf8 = BytesHashMap.fromTrustedList
+  ( map
+    (\(a,t) -> (Exts.fromList (ByteString.unpack (encodeUtf8 t)),fromIntegral a)
+    ) countryPairs
+  )
+
+-- It is a hack to pull from a source of randomness in here, but whatever.
+-- Maybe I can get rid of this if GHC ever supports casing on values of
+-- type ByteArray# along with good codegen for it.
+hashMapUtf16 :: BytesHashMap.Map
+hashMapUtf16 = BytesHashMap.fromTrustedList
+  ( map
+    (\(a,Text.Text (Text.Array arr) off16 len16) ->
+      (Bytes (ByteArray arr) (off16 * 2) (len16 * 2),fromIntegral a)
+    ) countryPairs
+  )
+
+countryPairs :: [(Word16,Text)]
+{-# NOINLINE countryPairs #-}
+countryPairs =
+  let x = aliases ++ concatMap
+        (\(num,name,(c2a,c2b),(c3a,c3b,c3c)) ->
+          [ (num,name)
+          , (num,T.pack [c2a,c2b])
+          , (num,T.pack [c3a,c3b,c3c])
+          , (num,T.pack [toLower c2a,toLower c2b])
+          , (num,T.pack [toLower c3a,toLower c3b,toLower c3c])
+          ]
+        ) countryNameQuads
+   in x ++ map (\(a,b) -> (a,slowToTitle b)) x
 
 -- This is only needed to support the reflex-platform fork of text. Fortunately,
 -- in all the places this is needed, it is only called to build CAFs.

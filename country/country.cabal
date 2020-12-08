@@ -1,3 +1,4 @@
+cabal-version: 2.2
 name: country
 version: 0.2.1
 synopsis: Country data type and functions
@@ -30,7 +31,7 @@ description:
   Please open up an issue on github if there is anything
   you would like to see added.
 homepage: https://github.com/andrewthad/country#readme
-license: BSD3
+license: BSD-3-Clause
 license-file: LICENSE
 author: Andrew Martin
 maintainer: andrew.thaddeus@gmail.com
@@ -38,7 +39,6 @@ copyright: 2017 Andrew Martin
 category: Web
 build-type: Simple
 extra-source-files: README.md
-cabal-version: >=1.10
 tested-with: GHC==8.10.1, GHC==8.8.3, GHC==8.6.5, GHC==8.4.4
 
 library
@@ -53,17 +53,22 @@ library
     Country.Unexposed.Trie
     Country.Unexposed.TrieByte
     Country.Unexposed.Alias
+    Country.Unexposed.AlphaTwoPtr
   build-depends:
-      base >= 4.9.1.0 && < 4.15
-    , text >= 1.2 && < 1.3
-    , bytestring >= 0.10 && < 0.11
-    , deepseq >= 1.3.0.2 && < 1.5
-    , primitive >= 0.6.4 && < 0.8
-    , unordered-containers >= 0.2 && < 0.3
-    , hashable >= 1.2 && < 1.4
-    , aeson >= 0.11 && < 1.6
-    , scientific >= 0.3 && < 0.4
-    , attoparsec >= 0.13 && < 0.14
+    , aeson >=1.2 && <1.6
+    , attoparsec >=0.13 && <0.14
+    , base >=4.12 && <5
+    , bytebuild >=0.3.4 && <0.4
+    , bytehash >=0.1 && <0.2
+    , byteslice >=0.2.3 && <0.3
+    , bytestring >= 0.10 && <0.12
+    , deepseq >= 1.3.0.2 && <1.5
+    , entropy >=0.4.1.5 && <0.5
+    , hashable >=1.2 && <1.4
+    , primitive >= 0.6.4 && <0.8
+    , scientific >=0.3 && <0.4
+    , text >= 1.2 && <1.3
+    , unordered-containers >=0.2 && <0.3
   default-language: Haskell2010
 
 test-suite test
@@ -71,14 +76,44 @@ test-suite test
   hs-source-dirs: test
   main-is: Spec.hs
   build-depends:
-      base
+    , QuickCheck
+    , base
     , country
+    , primitive
+    , quickcheck-classes >=0.6.4
     , tasty
     , tasty-quickcheck
-    , quickcheck-classes
-    , QuickCheck
+    , text
   ghc-options: -O2
   default-language: Haskell2010
+
+benchmark bench
+  type: exitcode-stdio-1.0
+  build-depends:
+    , country
+    , base
+    , byteslice
+    , bytestring
+    , gauge
+    , primitive
+    , text >=1.2
+  ghc-options: -Wall -O2
+  default-language: Haskell2010
+  hs-source-dirs: bench
+  main-is: Main.hs
+
+benchmark bench-size
+  type: exitcode-stdio-1.0
+  build-depends:
+    , country
+    , base
+    , bytestring
+    , compact
+    , bytehash
+  ghc-options: -Wall -O2
+  default-language: Haskell2010
+  hs-source-dirs: bench
+  main-is: Size.hs
 
 source-repository head
   type:     git
