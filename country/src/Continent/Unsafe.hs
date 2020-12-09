@@ -41,3 +41,13 @@ continentNameDb =
   , (5, "Oceania", ('O', 'C'))
   , (6, "South america", ('S', 'A'))
   ]
+
+instance Show Continent where
+  show Africa = "Africa"
+  show Asia = "Asia"
+  show Antarctica = "Antarctica"
+  show Europe = "Europe"
+  show NorthAmerica = "NorthAmerica"
+  show Oceania = "Oceania"
+  show SouthAmerica = "SouthAmerica"
+  show (Continent n) = "Continent " ++ show n

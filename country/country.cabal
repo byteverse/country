@@ -52,6 +52,7 @@ library
   other-modules:
     Country.Unexposed.Alias
     Country.Unexposed.AlphaTwoPtr
+    Country.Unexposed.Continents
     Country.Unexposed.Encode.English
     Country.Unexposed.Names
     Country.Unexposed.Trie

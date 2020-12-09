@@ -10,6 +10,8 @@ module Continent
   , pattern NorthAmerica
   , pattern Oceania
   , pattern SouthAmerica
+  -- * Continent Mapping
+  , continent
   -- * Name
   , encodeEnglish
   -- * Two-letter Codes
@@ -21,9 +23,12 @@ import Continent.Unsafe
 
 import Control.Monad (forM_)
 import Control.Monad.ST (runST)
-import Country.Unexposed.Util (charToWord16,mapTextArray,timesTwo)
+import Country.Unexposed.Continents (continentAList)
+import Country.Unexposed.Util (mapTextArray,charToWord16,word16ToInt,timesTwo)
+import Country.Unsafe (Country(Country))
 import Data.Char (toLower)
 import Data.Text (Text)
+import Data.Word (Word8)
 
 import qualified Data.Primitive as Prim
 import qualified Data.Text.Array as TA
@@ -65,6 +70,20 @@ englishContinentNamesText = runST $ do
   Prim.unsafeFreezeArray m
 {-# NOINLINE englishContinentNamesText #-}
 
+continent :: Country -> Continent
+continent (Country n) = Continent $ Prim.indexArray allContinents (word16ToInt n)
+
+allContinents :: Prim.Array Word8
+allContinents = runST $ do
+  m <- Prim.newArray numberOfPossibleCodes 255
+  forM_ continentAList $ \(ix,Continent n) ->
+    Prim.writeArray m (word16ToInt ix) n
+  Prim.unsafeFreezeArray m
+{-# NOINLINE allContinents #-}
+
 unnamed :: Text
 unnamed = "Invalid Continent"
 {-# NOINLINE unnamed #-}
+
+numberOfPossibleCodes :: Int
+numberOfPossibleCodes = 1000
