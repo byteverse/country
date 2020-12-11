@@ -1,3 +1,4 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE PatternSynonyms #-}
 
@@ -18,6 +19,7 @@ import Data.Word (Word8)
 
 
 newtype Continent = Continent Word8
+  deriving(Eq,Ord,Enum)
 
 
 {-# COMPLETE Africa, Asia, Antarctica, Europe, NorthAmerica, Oceania, SouthAmerica #-}
@@ -41,6 +43,10 @@ continentNameDb =
   , (5, "Oceania", ('O', 'C'))
   , (6, "South america", ('S', 'A'))
   ]
+
+instance Bounded Continent where
+  minBound = Continent 0
+  maxBound = Continent 6
 
 instance Show Continent where
   show Africa = "Africa"

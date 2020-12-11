@@ -111,7 +111,7 @@ decodeAlphaThree = flip HM.lookup alphaThreeHashMap
 --   and is very generous with what it accepts. It handles official
 --   names, colloquial names, acroynms, and obsolete names for many
 --   countries. It strives to handle any source language. Open an
---   issue on the issue tracker if their are names that are missing.
+--   issue on the issue tracker if there are names that are missing.
 decode :: Text -> Maybe Country
 decode (TI.Text (TA.Array arr) off16 len16) =
   case (BytesHashMap.lookup (Bytes (ByteArray arr) (off16 * 2) (len16 * 2)) hashMapUtf16) of

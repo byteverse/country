@@ -14,9 +14,11 @@ module Continent
   , continent
   -- * Name
   , encodeEnglish
+  , decodeEnglish
   -- * Two-letter Codes
   , alphaUpper
   , alphaLower
+  , decodeAlpha
   ) where
 
 import Continent.Unsafe
@@ -31,6 +33,7 @@ import Data.Text (Text)
 import Data.Word (Word8)
 
 import qualified Data.Primitive as Prim
+import qualified Data.Text as T
 import qualified Data.Text.Array as TA
 import qualified Data.Text.Internal as TI
 
@@ -60,6 +63,10 @@ allAlphaLower :: TA.Array
 allAlphaLower = mapTextArray toLower allAlphaUpper
 {-# NOINLINE allAlphaLower #-}
 
+decodeAlpha :: Text -> Maybe Continent
+decodeAlpha = fmap Continent . flip lookup tbl . T.toUpper
+  where tbl = flip map continentNameDb $ \(n,_,(a,b)) -> ((T.toUpper . T.pack) [a,b], n)
+
 encodeEnglish :: Continent -> Text
 encodeEnglish (Continent n) = Prim.indexArray englishContinentNamesText (fromIntegral n)
 
@@ -69,6 +76,10 @@ englishContinentNamesText = runST $ do
   mapM_ (\(ix,name,_) -> Prim.writeArray m (fromIntegral ix) name) continentNameDb
   Prim.unsafeFreezeArray m
 {-# NOINLINE englishContinentNamesText #-}
+
+decodeEnglish :: Text -> Maybe Continent
+decodeEnglish = fmap Continent . flip lookup tbl
+  where tbl = flip map continentNameDb $ \(n,name,_) -> (name, n)
 
 continent :: Country -> Continent
 continent (Country n) = Continent $ Prim.indexArray allContinents (word16ToInt n)

@@ -596,7 +596,7 @@ monaco = Country 492
 mongolia :: Country
 mongolia = Country 496
 
--- | Montenegro; Republic of Singapore; Singapore; Singapura; Yugoslavia
+-- | Montenegro; Yugoslavia
 montenegro :: Country
 montenegro = Country 499
 
@@ -800,7 +800,7 @@ seychelles = Country 690
 sierraLeone :: Country
 sierraLeone = Country 694
 
--- | Montenegro; Republic of Singapore; Singapore; Singapura; Yugoslavia
+-- | Republic of Singapore; Singapore; Singapura
 singapore :: Country
 singapore = Country 702
 
