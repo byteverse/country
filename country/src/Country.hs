@@ -31,37 +31,36 @@ module Country
   , hashMapUtf16
   ) where
 
-import Country.Unsafe (Country(..))
+import Control.Monad (forM_)
+import Control.Monad.ST (runST)
 import Country.Unexposed.AlphaTwoPtr (alphaTwoPtr)
 import Country.Unexposed.Encode.English (countryNameQuads)
-import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish)
 import Country.Unexposed.Names (hashMapUtf16,hashMapUtf8)
+import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish)
 import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
 import Country.Unexposed.TrieByte (TrieByte,trieByteFromList,trieByteParser)
-import Data.Text (Text)
+import Country.Unexposed.Util (mapTextArray,charToWord16,word16ToInt,timesTwo,timesThree)
+import Country.Unsafe (Country(..))
+import Data.Bytes.Types (Bytes(Bytes))
 import Data.ByteString (ByteString)
-import Data.Primitive.Ptr (indexOffPtr)
-import Data.Word (Word16)
+import Data.Char (toLower)
+import Data.Coerce (coerce)
 import Data.Primitive (writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
 import Data.Primitive.ByteArray (ByteArray(..))
-import GHC.Exts (sizeofByteArray#)
-import GHC.Int (Int(..))
-import Control.Monad.ST (runST)
-import Control.Monad
-import Data.Char (ord,chr,toLower)
-import Data.Bits (unsafeShiftL,unsafeShiftR)
-import Data.Coerce (coerce)
-import Data.Bytes.Types (Bytes(Bytes))
+import Data.Primitive.Ptr (indexOffPtr)
+import Data.Text (Text)
+import Data.Word (Word16)
 import Data.Word (Word8)
 import Foreign.Ptr (Ptr,plusPtr)
+
+import qualified Data.Attoparsec.ByteString as AB
+import qualified Data.Attoparsec.Text as AT
 import qualified Data.Bytes.Builder.Bounded.Unsafe as BBU
+import qualified Data.Bytes.HashMap.Word as BytesHashMap
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text.Array as TA
 import qualified Data.Text.Encoding as TE
 import qualified Data.Text.Internal as TI
-import qualified Data.Attoparsec.Text as AT
-import qualified Data.Attoparsec.ByteString as AB
-import qualified Data.Bytes.HashMap.Word as BytesHashMap
 
 -- | Convert a country to its numeric code. This is a
 --   three-digit number and will consequently be less than 1000.
@@ -107,21 +106,12 @@ decodeAlphaTwo = flip HM.lookup alphaTwoHashMap
 decodeAlphaThree :: Text -> Maybe Country
 decodeAlphaThree = flip HM.lookup alphaThreeHashMap
 
-half :: Int -> Int
-half x = unsafeShiftR x 1
-
-timesTwo :: Int -> Int
-timesTwo x = unsafeShiftL x 1
-
-timesThree :: Int -> Int
-timesThree x = x * 3
-
 
 -- | Parse a country from its name. This function is language-agnostic
 --   and is very generous with what it accepts. It handles official
 --   names, colloquial names, acroynms, and obsolete names for many
 --   countries. It strives to handle any source language. Open an
---   issue on the issue tracker if their are names that are missing.
+--   issue on the issue tracker if there are names that are missing.
 decode :: Text -> Maybe Country
 decode (TI.Text (TA.Array arr) off16 len16) =
   case (BytesHashMap.lookup (Bytes (ByteArray arr) (off16 * 2) (len16 * 2)) hashMapUtf16) of
@@ -148,15 +138,6 @@ parser = coerce (trieParser decodeTrie)
 -- | Parse a 'Country' using an 'AB.Parser'.
 parserUtf8 :: AB.Parser Country
 parserUtf8 = coerce (trieByteParser decodeTrieUtf8)
-
-word16ToInt :: Word16 -> Int
-word16ToInt = fromIntegral
-
-charToWord16 :: Char -> Word16
-charToWord16 = fromIntegral . ord
-
-word16ToChar :: Word16 -> Char
-word16ToChar = chr . fromIntegral
 
 numberOfCountries :: Int
 numberOfCountries = length countryNameQuads
@@ -206,19 +187,6 @@ allAlphaTwoLower :: TA.Array
 allAlphaTwoLower = mapTextArray toLower allAlphaTwoUpper
 {-# NOINLINE allAlphaTwoLower #-}
 
-mapTextArray :: (Char -> Char) -> TA.Array -> TA.Array
-mapTextArray f a@(TA.Array inner) = TA.run $ do
-  let len = half (I# (sizeofByteArray# inner))
-  m <- TA.new len
-  TA.copyI m 0 a 0 len
-  let go !ix = if ix < len
-        then do
-          TA.unsafeWrite m ix (charToWord16 (f (word16ToChar (TA.unsafeIndex a ix))))
-          go (ix + 1)
-        else return ()
-  go 0
-  return m
-
 decodeTrie :: Trie
 decodeTrie = trieFromList (map (\(a,Country x) -> (a,x)) (HM.toList decodeMap))
 {-# NOINLINE decodeTrie #-}
@@ -226,5 +194,3 @@ decodeTrie = trieFromList (map (\(a,Country x) -> (a,x)) (HM.toList decodeMap))
 decodeTrieUtf8 :: TrieByte
 decodeTrieUtf8 = trieByteFromList (map (\(a,Country x) -> (TE.encodeUtf8 a,x)) (HM.toList decodeMap))
 {-# NOINLINE decodeTrieUtf8 #-}
-
-
