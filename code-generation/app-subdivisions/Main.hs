@@ -38,34 +38,36 @@ render out xs = do
   put "  ( codeArray"
   put "  , nameArray"
   put "  , categoryArray"
+  put "  , actualNumberOfSubdivisions"
   put "  ) where"
   put ""
   put "import Data.Primitive.Contiguous (SmallArray)"
-  put "import Data.Text.Short (ShortText)"
+  put "import Data.Text (Text)"
   put ""
   put "import qualified Data.Primitive.Contiguous as Arr"
   put ""
-  put "codeArray :: SmallArray ShortText"
+  put "codeArray :: SmallArray Text"
   put $ "codeArray = Arr.fromListN " ++ show len
   putCode '[' topX
   forM_ restXs $ putCode ','
   put "  ]"
   put "{-# NOINLINE codeArray #-}"
-
   put ""
-  put "nameArray :: SmallArray ShortText"
+  put "nameArray :: SmallArray Text"
   put $ "nameArray = Arr.fromListN " ++ show len
   putName '[' topX
   forM_ restXs $ putName ','
   put "  ]"
   put "{-# NOINLINE nameArray #-}"
   put ""
-  put "categoryArray :: SmallArray ShortText"
+  put "categoryArray :: SmallArray Text"
   put $ "categoryArray = Arr.fromListN " ++ show len
   putCategory '[' topX
   forM_ restXs $ putCategory ','
   put "  ]"
   put "{-# NOINLINE categoryArray #-}"
+  put "actualNumberOfSubdivisions :: Int"
+  put $ "actualNumberOfSubdivisions = " ++ show len
   where
   put = hPutStrLn out
   len = length xs

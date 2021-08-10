@@ -6,14 +6,15 @@ module Country.Unexposed.Subdivision
   ( codeArray
   , nameArray
   , categoryArray
+  , actualNumberOfSubdivisions
   ) where
 
 import Data.Primitive.Contiguous (SmallArray)
-import Data.Text.Short (ShortText)
+import Data.Text (Text)
 
 import qualified Data.Primitive.Contiguous as Arr
 
-codeArray :: SmallArray ShortText
+codeArray :: SmallArray Text
 codeArray = Arr.fromListN 57
   [ "US-AL"
   , "US-AK"
@@ -75,7 +76,7 @@ codeArray = Arr.fromListN 57
   ]
 {-# NOINLINE codeArray #-}
 
-nameArray :: SmallArray ShortText
+nameArray :: SmallArray Text
 nameArray = Arr.fromListN 57
   [ "Alabama"
   , "Alaska"
@@ -137,7 +138,7 @@ nameArray = Arr.fromListN 57
   ]
 {-# NOINLINE nameArray #-}
 
-categoryArray :: SmallArray ShortText
+categoryArray :: SmallArray Text
 categoryArray = Arr.fromListN 57
   [ "state"
   , "state"
@@ -198,3 +199,5 @@ categoryArray = Arr.fromListN 57
   , "outlying area"
   ]
 {-# NOINLINE categoryArray #-}
+actualNumberOfSubdivisions :: Int
+actualNumberOfSubdivisions = 57
