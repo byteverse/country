@@ -73,6 +73,7 @@ codeArray = Arr.fromListN 57
   , "US-UM"
   , "US-VI"
   ]
+{-# NOINLINE codeArray #-}
 
 nameArray :: SmallArray ShortText
 nameArray = Arr.fromListN 57
@@ -134,6 +135,7 @@ nameArray = Arr.fromListN 57
   , "United States Minor Outlying Islands"
   , "U.S. Virgin Islands"
   ]
+{-# NOINLINE nameArray #-}
 
 categoryArray :: SmallArray ShortText
 categoryArray = Arr.fromListN 57
@@ -195,3 +197,4 @@ categoryArray = Arr.fromListN 57
   , "outlying area"
   , "outlying area"
   ]
+{-# NOINLINE categoryArray #-}

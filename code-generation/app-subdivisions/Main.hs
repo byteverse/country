@@ -50,19 +50,22 @@ render out xs = do
   putCode '[' topX
   forM_ restXs $ putCode ','
   put "  ]"
+  put "{-# NOINLINE codeArray #-}"
+
   put ""
   put "nameArray :: SmallArray ShortText"
   put $ "nameArray = Arr.fromListN " ++ show len
   putName '[' topX
   forM_ restXs $ putName ','
   put "  ]"
+  put "{-# NOINLINE nameArray #-}"
   put ""
   put "categoryArray :: SmallArray ShortText"
   put $ "categoryArray = Arr.fromListN " ++ show len
   putCategory '[' topX
   forM_ restXs $ putCategory ','
   put "  ]"
-  
+  put "{-# NOINLINE categoryArray #-}"
   where
   put = hPutStrLn out
   len = length xs
