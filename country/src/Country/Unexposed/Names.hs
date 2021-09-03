@@ -24,42 +24,43 @@ module Country.Unexposed.Names
   , Country(..)
   ) where
 
+import Control.Monad
+import Control.Monad.ST
+import Data.Word
+
 import Control.DeepSeq (NFData)
-import Data.Word (Word16)
-import Data.Hashable (Hashable)
-import Data.Primitive.Types (Prim)
-import Data.HashMap.Strict (HashMap)
+import Control.Exception (bracket)
+import Country.Unexposed.Alias (aliases)
+import Country.Unexposed.Encode.English (countryNameQuads)
+import Data.Bytes.Types (Bytes(Bytes))
 import Data.ByteString (ByteString)
-import Data.Primitive (indexArray)
+import Data.Char (toLower,isAlpha,toUpper)
+import Data.Data
+import Data.Hashable (Hashable)
+import Data.HashMap.Strict (HashMap)
+import Data.Primitive (Array,indexArray,newArray,unsafeFreezeArray,writeArray)
+import Data.Primitive (sizeOf)
+import Data.Primitive (writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
 import Data.Primitive.Array (Array(..))
 import Data.Primitive.ByteArray (ByteArray(..))
-import Control.Monad
+import Data.Primitive.Types (Prim)
+import Data.Text (Text)
 import Data.Text.Encoding (encodeUtf8)
-import Country.Unexposed.Alias (aliases)
+import Data.Word (Word16)
+import Foreign.Storable (Storable)
+import GHC.Generics (Generic)
+import System.Entropy (openHandle,closeHandle)
+import System.IO.Unsafe (unsafePerformIO)
+
 import qualified Data.Text as T
 import qualified Data.Aeson as AE
 import qualified Data.Aeson.Types as AET
 import qualified Data.HashMap.Strict as HM
 import qualified Data.List as L
-import Control.Monad.ST
-import Foreign.Storable (Storable)
-import Data.Text (Text)
-import Data.Word
-import Data.Char (toLower,isAlpha,toUpper)
-import Country.Unexposed.Encode.English (countryNameQuads)
-import Data.Primitive (Array,indexArray,newArray,unsafeFreezeArray,writeArray,
-  writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray,sizeOf)
 import qualified Data.Text as T
 import qualified Data.Scientific as SCI
 import qualified GHC.Exts as Exts
 import qualified System.IO as IO
-import GHC.Generics (Generic)
-import Data.Data
-import Data.Bytes.Types (Bytes(Bytes))
-import Control.Exception (bracket)
-import System.IO.Unsafe (unsafePerformIO)
-import System.Entropy (openHandle,closeHandle)
-
 import qualified Data.Bytes as Bytes
 import qualified Data.Bytes.HashMap.Word as BytesHashMap
 import qualified Data.Text.Internal as Text
@@ -252,4 +253,3 @@ alphaThreeHashMap = L.foldl'
   )
   HM.empty countryNameQuads
 {-# NOINLINE alphaThreeHashMap #-}
-

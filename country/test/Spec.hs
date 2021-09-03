@@ -3,6 +3,7 @@
 
 import Continent (Continent)
 import Country (Country)
+import Country.Subdivision (Subdivision)
 import Data.Char (ord)
 import Data.Maybe (fromJust)
 import Data.Primitive.Ptr (indexOffPtr)
@@ -13,6 +14,7 @@ import Test.Tasty.QuickCheck (testProperty,(===))
 
 import qualified Continent
 import qualified Country
+import qualified Country.Subdivision as Subdivision
 import qualified Data.Text as Text
 import qualified Test.QuickCheck as QC
 import qualified Test.QuickCheck.Classes as QCC
@@ -70,6 +72,20 @@ main = defaultMain $ testGroup "Country" $
     , testProperty "country-continent-smoke-china" $
       Continent.continent (fromJust $ Country.decodeAlphaTwo "CN") === Continent.Asia
     ]
+  , testGroup "Subdivision" $
+    ( map lawsToTest
+      $ map ($ Proxy @Subdivision)
+      $ [ QCC.boundedEnumLaws
+        , QCC.eqLaws
+        , QCC.ordLaws
+        , QCC.primLaws
+        , QCC.showLaws
+        , QCC.storableLaws
+        ]
+    ) ++
+    [ testProperty "encode-decode-alpha" $ \x ->
+      Just x === Subdivision.decodeAlpha (Subdivision.encodeAlpha x)
+    ]
   ]
 
 c2w :: Char -> Word8
@@ -81,8 +97,11 @@ proxy = Proxy
 lawsToTest :: QCC.Laws -> TestTree
 lawsToTest (QCC.Laws name pairs) = testGroup name (map (uncurry TQC.testProperty) pairs)
 
+instance QC.Arbitrary Continent where
+  arbitrary = QC.arbitraryBoundedEnum
+
 instance QC.Arbitrary Country where
   arbitrary = QC.arbitraryBoundedEnum
 
-instance QC.Arbitrary Continent where
+instance QC.Arbitrary Subdivision where
   arbitrary = QC.arbitraryBoundedEnum

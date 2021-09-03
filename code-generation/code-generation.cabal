@@ -1,9 +1,10 @@
+cabal-version: 3.0
 name: country-code-generation
 version: 0.1.0.0
 -- synopsis:
 -- description:
 homepage: https://github.com/andrewthad/country#readme
-license: BSD3
+license: BSD-3-Clause
 license-file: LICENSE
 author: Andrew Martin
 maintainer: andrew.thaddeus@gmail.com
@@ -11,23 +12,30 @@ copyright: 2017 Andrew Martin
 category: Web
 build-type: Simple
 extra-source-files: README.md, ../aliases.txt, ../countries.csv
-cabal-version: >=1.10
 
 executable country-code-generation
-  hs-source-dirs: app
+  hs-source-dirs: app-countries
+  main-is: Main.hs
+  build-depends:
+    , base
+    , bytestring >= 0.10
+    , colonnade >= 1.2.0.1
+    , containers
+    , disjoint-containers >= 0.2.3
+    , primitive
+    , siphon >= 0.8.1
+    , streaming
+    , streaming-bytestring
+    , text >= 1.2
+    , transformers
+  default-language: Haskell2010
+
+executable subdivision-code-generation
+  hs-source-dirs: app-subdivisions
   main-is: Main.hs
   build-depends:
       base
-    , streaming
-    , streaming-bytestring
-    , bytestring >= 0.10
-    , text >= 1.2
-    , siphon >= 0.8.1
-    , colonnade >= 1.2.0.1
-    , disjoint-containers >= 0.2.3
-    , containers
-    , transformers
-    , primitive
+    , split >=0.2
   default-language: Haskell2010
 
 source-repository head
