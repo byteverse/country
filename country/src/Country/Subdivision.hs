@@ -10,6 +10,7 @@ module Country.Subdivision
   , encodeAlpha
   , encodeAlphaShort
   , encodeEnglish
+  , encodeEnglishShort
   , category
   -- * Decoding
   , decodeAlpha
@@ -63,6 +64,9 @@ encodeAlphaShort (Subdivision i) = index Arrays.codeArrayShort (fromIntegral @Wo
 
 encodeEnglish :: Subdivision -> Text
 encodeEnglish (Subdivision i) = index Arrays.nameArray (fromIntegral @Word16 @Int i)
+
+encodeEnglishShort :: Subdivision -> ShortText
+encodeEnglishShort (Subdivision i) = index Arrays.nameArrayShort (fromIntegral @Word16 @Int i)
 
 category :: Subdivision -> Text
 category (Subdivision i) = index Arrays.categoryArray (fromIntegral @Word16 @Int i)

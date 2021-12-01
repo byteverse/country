@@ -6,6 +6,7 @@ module Country.Unexposed.Subdivision
   ( codeArray
   , codeArrayShort
   , nameArray
+  , nameArrayShort
   , categoryArray
   , actualNumberOfSubdivisions
   ) where
@@ -202,6 +203,68 @@ nameArray = Arr.fromListN 57
   , "U.S. Virgin Islands"
   ]
 {-# NOINLINE nameArray #-}
+
+nameArrayShort :: UnliftedArray ShortText
+nameArrayShort = Arr.fromListN 57
+  [ "Alabama"
+  , "Alaska"
+  , "Arizona"
+  , "Arkansas"
+  , "California"
+  , "Colorado"
+  , "Connecticut"
+  , "Delaware"
+  , "Florida"
+  , "Georgia"
+  , "Hawaii"
+  , "Idaho"
+  , "Illinois"
+  , "Indiana"
+  , "Iowa"
+  , "Kansas"
+  , "Kentucky"
+  , "Louisiana"
+  , "Maine"
+  , "Maryland"
+  , "Massachusetts"
+  , "Michigan"
+  , "Minnesota"
+  , "Mississippi"
+  , "Missouri"
+  , "Montana"
+  , "Nebraska"
+  , "Nevada"
+  , "New Hampshire"
+  , "New Jersey"
+  , "New Mexico"
+  , "New York"
+  , "North Carolina"
+  , "North Dakota"
+  , "Ohio"
+  , "Oklahoma"
+  , "Oregon"
+  , "Pennsylvania"
+  , "Rhode Island"
+  , "South Carolina"
+  , "South Dakota"
+  , "Tennessee"
+  , "Texas"
+  , "Utah"
+  , "Vermont"
+  , "Virginia"
+  , "Washington"
+  , "West Virginia"
+  , "Wisconsin"
+  , "Wyoming"
+  , "District of Columbia"
+  , "American Samoa"
+  , "Guam"
+  , "Northern Mariana Islands"
+  , "Puerto Rico"
+  , "United States Minor Outlying Islands"
+  , "U.S. Virgin Islands"
+  ]
+{-# NOINLINE nameArrayShort #-}
 
 categoryArray :: SmallArray Text
 categoryArray = Arr.fromListN 57

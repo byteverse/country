@@ -38,6 +38,7 @@ render out xs = do
   put "  ( codeArray"
   put "  , codeArrayShort"
   put "  , nameArray"
+  put "  , nameArrayShort"
   put "  , categoryArray"
   put "  , actualNumberOfSubdivisions"
   put "  ) where"
@@ -69,6 +70,13 @@ render out xs = do
   forM_ restXs $ putName ','
   put "  ]"
   put "{-# NOINLINE nameArray #-}"
+  put ""
+  put "nameArrayShort :: UnliftedArray ShortText"
+  put $ "nameArrayShort = Arr.fromListN " ++ show len
+  putName '[' topX
+  forM_ restXs $ putName ','
+  put "  ]"
+  put "{-# NOINLINE nameArrayShort #-}"
   put ""
   put "categoryArray :: SmallArray Text"
   put $ "categoryArray = Arr.fromListN " ++ show len
