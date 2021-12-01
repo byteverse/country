@@ -12,6 +12,7 @@ module Country
   , decodeNumeric
     -- * Name
   , encodeEnglish
+  , encodeEnglishShort
   , decode
   , decodeUtf8
   , decodeUtf8Bytes
@@ -36,7 +37,7 @@ import Control.Monad.ST (runST)
 import Country.Unexposed.AlphaTwoPtr (alphaTwoPtr)
 import Country.Unexposed.Encode.English (countryNameQuads)
 import Country.Unexposed.Names (hashMapUtf16,hashMapUtf8)
-import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish)
+import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish,encodeEnglishShort)
 import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
 import Country.Unexposed.TrieByte (TrieByte,trieByteFromList,trieByteParser)
 import Country.Unexposed.Util (mapTextArray,charToWord16,word16ToInt,timesTwo,timesThree)

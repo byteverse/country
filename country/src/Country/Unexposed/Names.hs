@@ -21,6 +21,7 @@ module Country.Unexposed.Names
   , alphaThreeHashMap
   , decodeNumeric
   , encodeEnglish
+  , encodeEnglishShort
   , Country(..)
   ) where
 
@@ -46,6 +47,7 @@ import Data.Primitive.ByteArray (ByteArray(..))
 import Data.Primitive.Types (Prim)
 import Data.Text (Text)
 import Data.Text.Encoding (encodeUtf8)
+import Data.Text.Short (ShortText)
 import Data.Word (Word16)
 import Foreign.Storable (Storable)
 import GHC.Generics (Generic)
@@ -57,6 +59,7 @@ import qualified Data.Aeson as AE
 import qualified Data.Aeson.Types as AET
 import qualified Data.HashMap.Strict as HM
 import qualified Data.List as L
+import qualified Data.Primitive.Unlifted.Array as PM
 import qualified Data.Text as T
 import qualified Data.Scientific as SCI
 import qualified GHC.Exts as Exts
@@ -65,11 +68,26 @@ import qualified Data.Bytes as Bytes
 import qualified Data.Bytes.HashMap.Word as BytesHashMap
 import qualified Data.Text.Internal as Text
 import qualified Data.Text.Array as Text
+import qualified Data.Text.Short as TS
 import qualified Data.ByteString as ByteString
 
 -- | The name of a country given in English
 encodeEnglish :: Country -> Text
+{-# inline encodeEnglish #-}
 encodeEnglish (Country n) = indexArray englishCountryNamesText (word16ToInt n)
+
+-- | The name of a country given in English
+encodeEnglishShort :: Country -> ShortText
+{-# inline encodeEnglishShort #-}
+encodeEnglishShort (Country n) =
+  PM.indexUnliftedArray englishCountryNamesShortText (word16ToInt n)
+
+englishCountryNamesShortText :: PM.UnliftedArray ShortText
+englishCountryNamesShortText = runST $ do
+  m <- PM.newUnliftedArray numberOfPossibleCodes unnamedShort
+  mapM_ (\(ix,name,_,_) -> PM.writeUnliftedArray m (word16ToInt ix) (TS.fromText name)) countryNameQuads
+  PM.unsafeFreezeUnliftedArray m
+{-# NOINLINE englishCountryNamesShortText #-}
 
 englishCountryNamesText :: Array Text
 englishCountryNamesText = runST $ do
@@ -94,6 +112,10 @@ toIdentifier t = case (T.uncons . T.filter isAlpha . slowToTitle) t of
 unnamed :: Text
 unnamed = T.pack "Invalid Country"
 {-# NOINLINE unnamed #-}
+
+unnamedShort :: ShortText
+unnamedShort = TS.pack "Invalid Country"
+{-# NOINLINE unnamedShort #-}
 
 numberOfPossibleCodes :: Int
 numberOfPossibleCodes = 1000
