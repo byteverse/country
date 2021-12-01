@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE TypeApplications #-}
@@ -5,28 +6,35 @@
 
 module Country.Subdivision
   ( Subdivision
-  -- , country -- TODO
   -- * Accessors
   , encodeAlpha
+  , encodeAlphaShort
   , encodeEnglish
   , category
   -- * Decoding
   , decodeAlpha
-  , decodeName
+  , decodeEnglish
+  , decodeEnglishUtf8Bytes
   ) where
 
+import Data.Bytes (Bytes)
 import Data.Hashable (Hashable)
 import Data.HashMap.Strict (HashMap)
 import Data.Primitive.Contiguous (index)
 import Data.Primitive.Types (Prim)
 import Data.Text (Text)
+import Data.Text.Short (ShortText)
+import Data.Text.Encoding (encodeUtf8)
 import Data.Word (Word16)
 import Foreign.Storable (Storable)
 
 import qualified Country.Unexposed.Subdivision as Arrays
+import qualified Data.Bytes.HashMap.Word as BytesHashMap
+import qualified Data.ByteString as ByteString
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Primitive.Contiguous as Arr
 import qualified Data.Text as T
+import qualified GHC.Exts as Exts
 
 newtype Subdivision = Subdivision Word16
   deriving (Eq,Ord,Prim,Hashable,Storable)
@@ -49,6 +57,9 @@ instance Bounded Subdivision where
 
 encodeAlpha :: Subdivision -> Text
 encodeAlpha (Subdivision i) = index Arrays.codeArray (fromIntegral @Word16 @Int i)
+
+encodeAlphaShort :: Subdivision -> ShortText
+encodeAlphaShort (Subdivision i) = index Arrays.codeArrayShort (fromIntegral @Word16 @Int i)
 
 encodeEnglish :: Subdivision -> Text
 encodeEnglish (Subdivision i) = index Arrays.nameArray (fromIntegral @Word16 @Int i)
@@ -73,8 +84,8 @@ alphaHashMap = Arr.ifoldl'
 
 -- | Decode a 'Subdivision' using its ISO subdivision English name
 -- It's not terribly forgiving, accepting only the official(?) names I found on wiki.
-decodeName :: Text -> Maybe Subdivision
-decodeName = flip HM.lookup englishHashMap
+decodeEnglish :: Text -> Maybe Subdivision
+decodeEnglish = flip HM.lookup englishHashMap
 
 englishHashMap :: HashMap Text Subdivision
 englishHashMap = Arr.ifoldl'
@@ -86,3 +97,22 @@ englishHashMap = Arr.ifoldl'
   )
   HM.empty Arrays.nameArray
 {-# NOINLINE englishHashMap #-}
+
+englishHashMapUtf8Bytes :: BytesHashMap.Map
+{-# NOINLINE englishHashMapUtf8Bytes #-}
+englishHashMapUtf8Bytes = BytesHashMap.fromTrustedList
+  ( imap
+    (\i t -> (Exts.fromList (ByteString.unpack (encodeUtf8 t)),fromIntegral i)
+    ) (Exts.toList Arrays.nameArray)
+  )
+
+decodeEnglishUtf8Bytes :: Bytes -> Maybe Subdivision
+decodeEnglishUtf8Bytes !bs = case BytesHashMap.lookup bs englishHashMapUtf8Bytes of
+  Nothing -> Nothing
+  Just w -> Just (Subdivision (fromIntegral w))
+
+imap :: (Int -> a -> b) -> [a] -> [b]
+imap f ls = go 0 ls
+  where
+    go !i (x:xs) = f i x : go (i + 1) xs
+    go !_ []     = []

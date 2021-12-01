@@ -15,7 +15,10 @@ import Test.Tasty.QuickCheck (testProperty,(===))
 import qualified Continent
 import qualified Country
 import qualified Country.Subdivision as Subdivision
+import qualified Data.Bytes as Bytes
 import qualified Data.Text as Text
+import qualified Data.Text.Encoding as Text
+import qualified Data.Text.Short as TS
 import qualified Test.QuickCheck as QC
 import qualified Test.QuickCheck.Classes as QCC
 import qualified Test.QuickCheck.Classes.IsList as QCCL
@@ -84,7 +87,11 @@ main = defaultMain $ testGroup "Country" $
         ]
     ) ++
     [ testProperty "encode-decode-alpha" $ \x ->
-      Just x === Subdivision.decodeAlpha (Subdivision.encodeAlpha x)
+        Just x === Subdivision.decodeAlpha (Subdivision.encodeAlpha x)
+    , testProperty "encode-short" $ \x ->
+        Just x === Subdivision.decodeAlpha (TS.toText (Subdivision.encodeAlphaShort x))
+    , testProperty "decode-utf8-bytes" $ \x ->
+        Just x === Subdivision.decodeEnglishUtf8Bytes (Bytes.fromByteString (Text.encodeUtf8 (Subdivision.encodeEnglish x)))
     ]
   ]
 

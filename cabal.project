@@ -1,6 +1,1 @@
 packages: ./country, ./code-generation
-
-source-repository-package
-  type: git
-  location: https://github.com/andrewthad/contiguous
-  tag: f7e10b86e22e1ad173ab54cc66bd6c2bf3322c11

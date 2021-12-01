@@ -68,11 +68,12 @@ library
     , bytehash >=0.1 && <0.2
     , byteslice >=0.2.3 && <0.3
     , bytestring >= 0.10 && <0.12
-    , contiguous >=0.5.2
+    , contiguous >=0.6.1
     , deepseq >= 1.3.0.2 && <1.5
     , entropy >=0.4.1.5 && <0.5
     , hashable >=1.2 && <1.4
     , primitive >= 0.6.4 && <0.8
+    , primitive-unlifted >= 0.1.3 && <1.0
     , scientific >=0.3 && <0.4
     , text >= 1.2 && <1.3
     , text-short >=0.1.3
@@ -87,12 +88,14 @@ test-suite test
   build-depends:
     , QuickCheck
     , base
+    , byteslice
     , country
     , primitive
     , quickcheck-classes >=0.6.4
     , tasty
     , tasty-quickcheck
     , text
+    , text-short
   ghc-options: -O2
   default-language: Haskell2010
 

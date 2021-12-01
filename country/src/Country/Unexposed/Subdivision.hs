@@ -4,6 +4,7 @@
 
 module Country.Unexposed.Subdivision
   ( codeArray
+  , codeArrayShort
   , nameArray
   , categoryArray
   , actualNumberOfSubdivisions
@@ -11,6 +12,8 @@ module Country.Unexposed.Subdivision
 
 import Data.Primitive.Contiguous (SmallArray)
 import Data.Text (Text)
+import Data.Text.Short (ShortText)
+import Data.Primitive.Unlifted.Array (UnliftedArray)
 
 import qualified Data.Primitive.Contiguous as Arr
 
@@ -75,6 +78,68 @@ codeArray = Arr.fromListN 57
   , "US-VI"
   ]
 {-# NOINLINE codeArray #-}
+
+codeArrayShort :: UnliftedArray ShortText
+codeArrayShort = Arr.fromListN 57
+  [ "US-AL"
+  , "US-AK"
+  , "US-AZ"
+  , "US-AR"
+  , "US-CA"
+  , "US-CO"
+  , "US-CT"
+  , "US-DE"
+  , "US-FL"
+  , "US-GA"
+  , "US-HI"
+  , "US-ID"
+  , "US-IL"
+  , "US-IN"
+  , "US-IA"
+  , "US-KS"
+  , "US-KY"
+  , "US-LA"
+  , "US-ME"
+  , "US-MD"
+  , "US-MA"
+  , "US-MI"
+  , "US-MN"
+  , "US-MS"
+  , "US-MO"
+  , "US-MT"
+  , "US-NE"
+  , "US-NV"
+  , "US-NH"
+  , "US-NJ"
+  , "US-NM"
+  , "US-NY"
+  , "US-NC"
+  , "US-ND"
+  , "US-OH"
+  , "US-OK"
+  , "US-OR"
+  , "US-PA"
+  , "US-RI"
+  , "US-SC"
+  , "US-SD"
+  , "US-TN"
+  , "US-TX"
+  , "US-UT"
+  , "US-VT"
+  , "US-VA"
+  , "US-WA"
+  , "US-WV"
+  , "US-WI"
+  , "US-WY"
+  , "US-DC"
+  , "US-AS"
+  , "US-GU"
+  , "US-MP"
+  , "US-PR"
+  , "US-UM"
+  , "US-VI"
+  ]
+{-# NOINLINE codeArrayShort #-}
 
 nameArray :: SmallArray Text
 nameArray = Arr.fromListN 57
