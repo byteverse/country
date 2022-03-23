@@ -80,7 +80,6 @@ alphaHashMap :: HashMap Text Subdivision
 alphaHashMap = Arr.ifoldl'
   (\hm i x ->
       HM.insert x (Subdivision $ fromIntegral i)
-    -- $ HM.insert (T.pack [toLower c1, toLower c2, toLower c3]) (Country countryNum)
     $ hm
   )
   HM.empty Arrays.codeArray
