@@ -1,6 +1,6 @@
 cabal-version: 2.2
 name: country
-version: 0.2.1
+version: 0.2.2
 synopsis: Country data type and functions
 description:
   The `country` library provides a data type for dealing with
