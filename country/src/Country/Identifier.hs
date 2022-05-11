@@ -388,7 +388,7 @@ guyana = Country 328
 haiti :: Country
 haiti = Country 332
 
--- | Heard Island and McDonald Islands
+-- | Heard Island and McDonald Islands; Heard and McDonald Islands
 heardIslandAndMcdonaldIslands :: Country
 heardIslandAndMcdonaldIslands = Country 334
 

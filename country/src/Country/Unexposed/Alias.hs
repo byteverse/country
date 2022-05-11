@@ -187,6 +187,7 @@ aliases =
   , (328, T.pack "Guyana")
   , (332, T.pack "Haiti")
   , (334, T.pack "Heard Island and McDonald Islands")
+  , (334, T.pack "Heard and McDonald Islands")
   , (336, T.pack "Holy See")
   , (336, T.pack "Vatican")
   , (336, T.pack "Vatican City")
