@@ -443,6 +443,7 @@ aliases =
   , (663, T.pack "St. Martin")
   , (666, T.pack "Saint Pierre and Miquelon")
   , (670, T.pack "Saint Vincent and the Grenadines")
+  , (670, T.pack "St Vincent and Grenadines")
   , (882, T.pack "Samoa")
   , (674, T.pack "San Marino")
   , (678, T.pack "Sao Tome and Principe")

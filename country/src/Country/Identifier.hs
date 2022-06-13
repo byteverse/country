@@ -764,7 +764,7 @@ saintMartinFrenchPart = Country 663
 saintPierreAndMiquelon :: Country
 saintPierreAndMiquelon = Country 666
 
--- | Saint Vincent and the Grenadines
+-- | Saint Vincent and the Grenadines; St Vincent and Grenadines
 saintVincentAndTheGrenadines :: Country
 saintVincentAndTheGrenadines = Country 670
 

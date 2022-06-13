@@ -1,0 +1,10 @@
+resolver: lts-14.20
+packages:
+- './country'
+- './country-code-generation'
+extra-deps:
+- disjoint-containers-0.2.3
+- siphon-0.8.1
+- base-compat-0.9.3
+flags: {}
+extra-package-dbs: []
