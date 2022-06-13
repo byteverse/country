@@ -561,6 +561,7 @@ aliases =
   , (840, T.pack "Usono")
   , (581, T.pack "United States Minor Outlying Islands")
   , (581, T.pack "U.S. Minor Outlying Islands")
+  , (581, T.pack "U.S. Outlying Islands")
   , (858, T.pack "Uruguay")
   , (860, T.pack "Uzbekistan")
   , (548, T.pack "Vanuatu")

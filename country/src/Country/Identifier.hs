@@ -948,7 +948,7 @@ unitedKingdomOfGreatBritainAndNorthernIreland = Country 826
 unitedStatesOfAmerica :: Country
 unitedStatesOfAmerica = Country 840
 
--- | U.S. Minor Outlying Islands; United States Minor Outlying Islands
+-- | U.S. Minor Outlying Islands; U.S. Outlying Islands; United States Minor Outlying Islands
 unitedStatesMinorOutlyingIslands :: Country
 unitedStatesMinorOutlyingIslands = Country 581
 
