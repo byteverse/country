@@ -116,13 +116,14 @@ decodeAlphaThree = flip HM.lookup alphaThreeHashMap
 --   issue on the issue tracker if there are names that are missing.
 decode :: Text -> Maybe Country
 #if MIN_VERSION_base(4,17,0)
-decode (TI.Text (TA.ByteArray arr) off16 len16) =
+decode txt =
+    decodeUtf8 (TE.encodeUtf8 txt)
 #else
 decode (TI.Text (TA.Array arr) off16 len16) =
-#endif
   case (BytesHashMap.lookup (Bytes (ByteArray arr) (off16 * 2) (len16 * 2)) hashMapUtf16) of
     Nothing -> Nothing
     Just w -> Just (Country (fromIntegral w))
+#endif
 
 -- | Decode a 'Country' from a UTF-8-encoded 'ByteString'.
 decodeUtf8 :: ByteString -> Maybe Country

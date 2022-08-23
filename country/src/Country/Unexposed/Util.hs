@@ -1,3 +1,4 @@
+{-# language RankNTypes #-}
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE MagicHash #-}
@@ -21,16 +22,40 @@ import Data.Char (chr,ord)
 import Data.Word (Word16, Word8)
 import GHC.Exts (sizeofByteArray#)
 import GHC.Int (Int(I#))
+import Control.Monad.ST
+import Data.Text.Unsafe
+import Data.Text.Internal
+import qualified Data.Text.Internal.Unsafe.Char as Unsafe.Char
 
 import qualified Data.Text.Array as TA
 
 
 mapTextArray :: (Char -> Char) -> TA.Array -> TA.Array
 #if MIN_VERSION_base(4,17,0)
-mapTextArray f a@(TA.ByteArray inner) = TA.run $ do
+mapTextArray f src@(TA.ByteArray arr) = runST $ do
+      marr <- TA.new (l + 4)
+      outer marr (l + 4) o 0
+      where
+        o = 0
+        l = I# (sizeofByteArray# arr)
+        outer :: forall s. TA.MArray s -> Int -> Int -> Int -> ST s TA.Array
+        outer !dst !dstLen = inner
+          where
+            inner !srcOff !dstOff
+              | srcOff >= l + o = do
+                TA.shrinkM dst dstOff
+                arr <- TA.unsafeFreeze dst
+                return arr
+              | dstOff + 4 > dstLen = do
+                let !dstLen' = dstLen + (l + o) - srcOff + 4
+                dst' <- TA.resizeM dst dstLen'
+                outer dst' dstLen' srcOff dstOff
+              | otherwise = do
+                let !(Iter c d) = iterArray src srcOff
+                d' <- Unsafe.Char.unsafeWrite dst dstOff (safe (f c))
+                inner (srcOff + d) (dstOff + d')
 #else
 mapTextArray f a@(TA.Array inner) = TA.run $ do
-#endif
   let len = half (I# (sizeofByteArray# inner))
   m <- TA.new len
   TA.copyI len m 0 a 0
@@ -41,6 +66,7 @@ mapTextArray f a@(TA.Array inner) = TA.run $ do
         else return ()
   go 0
   return m
+#endif
 {-# INLINE mapTextArray #-}
 
 #if MIN_VERSION_text(2,0,0)
