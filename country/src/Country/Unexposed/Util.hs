@@ -1,10 +1,15 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE MagicHash #-}
 
 module Country.Unexposed.Util
   ( mapTextArray
+  , textWordToChar
+  , charToTextWord
   , charToWord16
   , word16ToChar
+  , charToWord8
+  , word8ToChar
   , word16ToInt
   , timesTwo
   , timesThree
@@ -13,7 +18,7 @@ module Country.Unexposed.Util
 
 import Data.Bits (unsafeShiftL,unsafeShiftR)
 import Data.Char (chr,ord)
-import Data.Word (Word16)
+import Data.Word (Word16, Word8)
 import GHC.Exts (sizeofByteArray#)
 import GHC.Int (Int(I#))
 
@@ -21,18 +26,44 @@ import qualified Data.Text.Array as TA
 
 
 mapTextArray :: (Char -> Char) -> TA.Array -> TA.Array
+#if MIN_VERSION_base(4,17,0)
+mapTextArray f a@(TA.ByteArray inner) = TA.run $ do
+#else
 mapTextArray f a@(TA.Array inner) = TA.run $ do
+#endif
   let len = half (I# (sizeofByteArray# inner))
   m <- TA.new len
-  TA.copyI m 0 a 0 len
+  TA.copyI len m 0 a 0
   let go !ix = if ix < len
         then do
-          TA.unsafeWrite m ix (charToWord16 (f (word16ToChar (TA.unsafeIndex a ix))))
+          TA.unsafeWrite m ix (charToTextWord (f (textWordToChar (TA.unsafeIndex a ix))))
           go (ix + 1)
         else return ()
   go 0
   return m
 {-# INLINE mapTextArray #-}
+
+#if MIN_VERSION_text(2,0,0)
+textWordToChar :: Word8 -> Char
+textWordToChar = word8ToChar
+
+charToTextWord :: Char -> Word8
+charToTextWord = charToWord8
+#else
+textWordToChar :: Word16 -> Char
+textWordToChar = word16ToChar
+
+charToTextWord :: Char -> Word16
+charToTextWord = charToWord16
+#endif
+
+word8ToChar :: Word8 -> Char
+word8ToChar = chr . fromIntegral
+{-# INLINE word8ToChar #-}
+
+charToWord8 :: Char -> Word8
+charToWord8 = fromIntegral . ord
+{-# INLINE charToWord8 #-}
 
 word16ToChar :: Word16 -> Char
 word16ToChar = chr . fromIntegral
