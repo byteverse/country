@@ -115,7 +115,7 @@ decodeAlphaThree = flip HM.lookup alphaThreeHashMap
 --   countries. It strives to handle any source language. Open an
 --   issue on the issue tracker if there are names that are missing.
 decode :: Text -> Maybe Country
-#if MIN_VERSION_base(4,17,0)
+#if MIN_VERSION_text(2,0,0)
 decode txt =
     decodeUtf8 (TE.encodeUtf8 txt)
 #else

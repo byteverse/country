@@ -141,7 +141,7 @@ hashMapUtf8 = BytesHashMap.fromTrustedList
 hashMapUtf16 :: BytesHashMap.Map
 hashMapUtf16 = BytesHashMap.fromTrustedList
   ( map
-#if MIN_VERSION_base(4,17,0)
+#if MIN_VERSION_text(2,0,0)
     (\(a,Text.Text (Text.ByteArray arr) off16 len16) ->
 #else
     (\(a,Text.Text (Text.Array arr) off16 len16) ->

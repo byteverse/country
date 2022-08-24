@@ -31,7 +31,7 @@ import qualified Data.Text.Array as TA
 
 
 mapTextArray :: (Char -> Char) -> TA.Array -> TA.Array
-#if MIN_VERSION_base(4,17,0)
+#if MIN_VERSION_text(2,0,0)
 mapTextArray f src@(TA.ByteArray arr) = runST $ do
     -- this implementation is lifted from the text internals
       marr <- TA.new (l + 4)
