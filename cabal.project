@@ -9,7 +9,7 @@ allow-newer:
     colonnade:text,
 
 constraints:
-    text == 2.0.1
+    text < 2
 
 -- https://github.com/byteverse/bytebuild/pull/29
 source-repository-package

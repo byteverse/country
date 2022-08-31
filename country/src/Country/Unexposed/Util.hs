@@ -59,7 +59,7 @@ mapTextArray f src@(TA.ByteArray arr) = runST $ do
 mapTextArray f a@(TA.Array inner) = TA.run $ do
   let len = half (I# (sizeofByteArray# inner))
   m <- TA.new len
-  TA.copyI len m 0 a 0
+  TA.copyI m 0 a 0 len
   let go !ix = if ix < len
         then do
           TA.unsafeWrite m ix (charToTextWord (f (textWordToChar (TA.unsafeIndex a ix))))
