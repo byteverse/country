@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE MagicHash #-}
@@ -40,7 +41,7 @@ import Country.Unexposed.Names (hashMapUtf16,hashMapUtf8)
 import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish,encodeEnglishShort)
 import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
 import Country.Unexposed.TrieByte (TrieByte,trieByteFromList,trieByteParser)
-import Country.Unexposed.Util (mapTextArray,charToWord16,word16ToInt,timesTwo,timesThree)
+import Country.Unexposed.Util (mapTextArray,charToTextWord,word16ToInt,timesTwo,timesThree)
 import Country.Unsafe (Country(..))
 import Data.Bytes.Types (Bytes(Bytes))
 import Data.ByteString (ByteString)
@@ -114,10 +115,15 @@ decodeAlphaThree = flip HM.lookup alphaThreeHashMap
 --   countries. It strives to handle any source language. Open an
 --   issue on the issue tracker if there are names that are missing.
 decode :: Text -> Maybe Country
+#if MIN_VERSION_text(2,0,0)
+decode txt =
+    decodeUtf8 (TE.encodeUtf8 txt)
+#else
 decode (TI.Text (TA.Array arr) off16 len16) =
   case (BytesHashMap.lookup (Bytes (ByteArray arr) (off16 * 2) (len16 * 2)) hashMapUtf16) of
     Nothing -> Nothing
     Just w -> Just (Country (fromIntegral w))
+#endif
 
 -- | Decode a 'Country' from a UTF-8-encoded 'ByteString'.
 decodeUtf8 :: ByteString -> Maybe Country
@@ -164,8 +170,8 @@ allAlphaTwoUpper = TA.run $ do
   m <- TA.new (timesTwo numberOfCountries)
   forM_ countryNameQuads $ \(n,_,(a1,a2),_) -> do
     let ix = timesTwo (indexOfCountry (Country n))
-    TA.unsafeWrite m ix (charToWord16 a1)
-    TA.unsafeWrite m (ix + 1) (charToWord16 a2)
+    TA.unsafeWrite m ix (charToTextWord a1)
+    TA.unsafeWrite m (ix + 1) (charToTextWord a2)
   return m
 {-# NOINLINE allAlphaTwoUpper #-}
 
@@ -174,9 +180,9 @@ allAlphaThreeUpper = TA.run $ do
   m <- TA.new (timesThree numberOfCountries)
   forM_ countryNameQuads $ \(n,_,_,(a1,a2,a3)) -> do
     let ix = timesThree (indexOfCountry (Country n))
-    TA.unsafeWrite m ix (charToWord16 a1)
-    TA.unsafeWrite m (ix + 1) (charToWord16 a2)
-    TA.unsafeWrite m (ix + 2) (charToWord16 a3)
+    TA.unsafeWrite m ix (charToTextWord a1)
+    TA.unsafeWrite m (ix + 1) (charToTextWord a2)
+    TA.unsafeWrite m (ix + 2) (charToTextWord a3)
   return m
 {-# NOINLINE allAlphaThreeUpper #-}
 
