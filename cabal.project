@@ -1,1 +1,13 @@
 packages: ./country, ./code-generation
+
+source-repository-package
+    type: git
+    location: https://github.com/andrewthad/colonnade
+    tag: f349da832b5b30cf3dae05ff49f1b9b6b5a57b93
+    subdir: siphon
+
+source-repository-package
+    type: git
+    location: https://github.com/andrewthad/colonnade
+    tag: f349da832b5b30cf3dae05ff49f1b9b6b5a57b93
+    subdir: colonnade
