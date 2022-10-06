@@ -3,7 +3,7 @@
 
 module Country.Unexposed.Util
   ( mapTextArray
-  , charToWord16
+  , charToWord8
   , word16ToChar
   , word16ToInt
   , timesTwo
@@ -13,7 +13,7 @@ module Country.Unexposed.Util
 
 import Data.Bits (unsafeShiftL,unsafeShiftR)
 import Data.Char (chr,ord)
-import Data.Word (Word16)
+import Data.Word (Word8,Word16)
 import GHC.Exts (sizeofByteArray#)
 import GHC.Int (Int(I#))
 
@@ -21,26 +21,30 @@ import qualified Data.Text.Array as TA
 
 
 mapTextArray :: (Char -> Char) -> TA.Array -> TA.Array
-mapTextArray f a@(TA.Array inner) = TA.run $ do
-  let len = half (I# (sizeofByteArray# inner))
+mapTextArray f a@(TA.ByteArray inner) = TA.run $ do
+  let len = I# (sizeofByteArray# inner)
   m <- TA.new len
-  TA.copyI m 0 a 0 len
+  TA.copyI len m 0 a 0
   let go !ix = if ix < len
         then do
-          TA.unsafeWrite m ix (charToWord16 (f (word16ToChar (TA.unsafeIndex a ix))))
+          TA.unsafeWrite m ix (charToWord8 (f (word8ToChar (TA.unsafeIndex a ix))))
           go (ix + 1)
         else return ()
   go 0
   return m
 {-# INLINE mapTextArray #-}
 
+charToWord8 :: Char -> Word8
+charToWord8 = fromIntegral . ord
+{-# INLINE charToWord8 #-}
+
+word8ToChar :: Word8 -> Char
+word8ToChar = chr . fromIntegral
+{-# INLINE word8ToChar #-}
+
 word16ToChar :: Word16 -> Char
 word16ToChar = chr . fromIntegral
 {-# INLINE word16ToChar #-}
-
-charToWord16 :: Char -> Word16
-charToWord16 = fromIntegral . ord
-{-# INLINE charToWord16 #-}
 
 word16ToInt :: Word16 -> Int
 word16ToInt = fromIntegral

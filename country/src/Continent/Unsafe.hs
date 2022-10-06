@@ -56,4 +56,3 @@ instance Show Continent where
   show NorthAmerica = "NorthAmerica"
   show Oceania = "Oceania"
   show SouthAmerica = "SouthAmerica"
-  show (Continent n) = "Continent " ++ show n

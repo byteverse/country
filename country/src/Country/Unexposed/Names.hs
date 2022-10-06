@@ -30,7 +30,6 @@ import Control.Monad.ST
 import Data.Word
 
 import Control.DeepSeq (NFData)
-import Control.Exception (bracket)
 import Country.Unexposed.Alias (aliases)
 import Country.Unexposed.Encode.English (countryNameQuads)
 import Data.Bytes.Types (Bytes(Bytes))
@@ -42,34 +41,28 @@ import Data.HashMap.Strict (HashMap)
 import Data.Primitive (Array,indexArray,newArray,unsafeFreezeArray,writeArray)
 import Data.Primitive (sizeOf)
 import Data.Primitive (writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
-import Data.Primitive.Array (Array(..))
 import Data.Primitive.ByteArray (ByteArray(..))
 import Data.Primitive.Types (Prim)
 import Data.Text (Text)
-import Data.Text.Encoding (encodeUtf8)
+import Data.Text.Encoding (encodeUtf8,encodeUtf16BE)
 import Data.Text.Short (ShortText)
-import Data.Word (Word16)
 import Foreign.Storable (Storable)
 import GHC.Generics (Generic)
-import System.Entropy (openHandle,closeHandle)
-import System.IO.Unsafe (unsafePerformIO)
 
-import qualified Data.Text as T
 import qualified Data.Aeson as AE
 import qualified Data.Aeson.Types as AET
+import qualified Data.Bytes as Bytes
+import qualified Data.Bytes.HashMap.Word as BytesHashMap
+import qualified Data.ByteString as ByteString
 import qualified Data.HashMap.Strict as HM
 import qualified Data.List as L
 import qualified Data.Primitive.Unlifted.Array as PM
-import qualified Data.Text as T
 import qualified Data.Scientific as SCI
-import qualified GHC.Exts as Exts
-import qualified System.IO as IO
-import qualified Data.Bytes as Bytes
-import qualified Data.Bytes.HashMap.Word as BytesHashMap
-import qualified Data.Text.Internal as Text
+import qualified Data.Text as T
 import qualified Data.Text.Array as Text
+import qualified Data.Text.Internal as Text
 import qualified Data.Text.Short as TS
-import qualified Data.ByteString as ByteString
+import qualified GHC.Exts as Exts
 
 -- | The name of a country given in English
 encodeEnglish :: Country -> Text
@@ -140,11 +133,10 @@ hashMapUtf8 = BytesHashMap.fromTrustedList
 hashMapUtf16 :: BytesHashMap.Map
 hashMapUtf16 = BytesHashMap.fromTrustedList
   ( map
-    (\(a,Text.Text (Text.Array arr) off16 len16) ->
-      (Bytes (ByteArray arr) (off16 * 2) (len16 * 2),fromIntegral a)
+    (\(a, str) ->
+      (Bytes.fromByteString $ encodeUtf16BE str, fromIntegral a)
     ) countryPairs
   )
-
 countryPairs :: [(Word16,Text)]
 {-# NOINLINE countryPairs #-}
 countryPairs =
@@ -212,9 +204,6 @@ actualNumberOfCountries :: Int
 actualNumberOfCountries = length countryNameQuads
 {-# NOINLINE actualNumberOfCountries #-}
 
-
-codeToEnum :: Word16 -> Int
-codeToEnum w = indexByteArray countryCodeToSequentialMapping (word16ToInt w)
 
 -- todo: add support for encoding directly to bytestring.
 -- Also, add suport for ToJSONKey and FromJSONKey once everything
