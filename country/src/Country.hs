@@ -40,7 +40,7 @@ import Country.Unexposed.Names (hashMapUtf16,hashMapUtf8)
 import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish,encodeEnglishShort)
 import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
 import Country.Unexposed.TrieByte (TrieByte,trieByteFromList,trieByteParser)
-import Country.Unexposed.Util (mapTextArray,charToWord16,word16ToInt,timesTwo,timesThree)
+import Country.Unexposed.Util (mapTextArray,charToWord8,word16ToInt,timesTwo,timesThree)
 import Country.Unsafe (Country(..))
 import Data.Bytes.Types (Bytes(Bytes))
 import Data.ByteString (ByteString)
@@ -114,8 +114,8 @@ decodeAlphaThree = flip HM.lookup alphaThreeHashMap
 --   countries. It strives to handle any source language. Open an
 --   issue on the issue tracker if there are names that are missing.
 decode :: Text -> Maybe Country
-decode (TI.Text (TA.Array arr) off16 len16) =
-  case (BytesHashMap.lookup (Bytes (ByteArray arr) (off16 * 2) (len16 * 2)) hashMapUtf16) of
+decode (TI.Text (TA.ByteArray arr) off8 len8) =
+  case (BytesHashMap.lookup (Bytes (ByteArray arr) off8 len8) hashMapUtf8) of
     Nothing -> Nothing
     Just w -> Just (Country (fromIntegral w))
 
@@ -164,8 +164,8 @@ allAlphaTwoUpper = TA.run $ do
   m <- TA.new (timesTwo numberOfCountries)
   forM_ countryNameQuads $ \(n,_,(a1,a2),_) -> do
     let ix = timesTwo (indexOfCountry (Country n))
-    TA.unsafeWrite m ix (charToWord16 a1)
-    TA.unsafeWrite m (ix + 1) (charToWord16 a2)
+    TA.unsafeWrite m ix (charToWord8 a1)
+    TA.unsafeWrite m (ix + 1) (charToWord8 a2)
   return m
 {-# NOINLINE allAlphaTwoUpper #-}
 
@@ -174,9 +174,9 @@ allAlphaThreeUpper = TA.run $ do
   m <- TA.new (timesThree numberOfCountries)
   forM_ countryNameQuads $ \(n,_,_,(a1,a2,a3)) -> do
     let ix = timesThree (indexOfCountry (Country n))
-    TA.unsafeWrite m ix (charToWord16 a1)
-    TA.unsafeWrite m (ix + 1) (charToWord16 a2)
-    TA.unsafeWrite m (ix + 2) (charToWord16 a3)
+    TA.unsafeWrite m ix (charToWord8 a1)
+    TA.unsafeWrite m (ix + 1) (charToWord8 a2)
+    TA.unsafeWrite m (ix + 2) (charToWord8 a3)
   return m
 {-# NOINLINE allAlphaThreeUpper #-}
 

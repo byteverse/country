@@ -21,10 +21,10 @@ executable country-code-generation
     , streaming
     , streaming-bytestring
     , bytestring >= 0.10
-    , text >= 1.2
+    , text >= 1.2 && < 2.1
     , siphon >= 0.8.1
     , colonnade >= 1.2.0.1
-    , disjoint-containers >= 0.2.3
+    , disjoint-containers >= 0.3
     , containers
     , transformers
     , primitive

@@ -26,7 +26,7 @@ import Continent.Unsafe
 import Control.Monad (forM_)
 import Control.Monad.ST (runST)
 import Country.Unexposed.Continents (continentAList)
-import Country.Unexposed.Util (mapTextArray,charToWord16,word16ToInt,timesTwo)
+import Country.Unexposed.Util (mapTextArray,charToWord8,word16ToInt,timesTwo)
 import Country.Unsafe (Country(Country))
 import Data.Char (toLower)
 import Data.Text (Text)
@@ -51,8 +51,8 @@ allAlphaUpper = TA.run $ do
   m <- TA.new (timesTwo numberOfContinents)
   forM_ continentNameDb $ \(n,_,(a1,a2)) -> do
     let ix = timesTwo (fromIntegral n)
-    TA.unsafeWrite m ix (charToWord16 a1)
-    TA.unsafeWrite m (ix + 1) (charToWord16 a2)
+    TA.unsafeWrite m ix (charToWord8 a1)
+    TA.unsafeWrite m (ix + 1) (charToWord8 a2)
   return m
 {-# NOINLINE allAlphaUpper #-}
 
