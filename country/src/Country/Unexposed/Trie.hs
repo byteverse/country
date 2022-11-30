@@ -14,8 +14,8 @@ import qualified Data.HashMap.Strict as HM
 import qualified Data.Attoparsec.Text as AT
 import qualified Data.Semigroup as SG
 
--- | If the value is not the max Word16 (65535), there 
---   is a match. This means that 65535 cannot be used, which 
+-- | If the value is not the max Word16 (65535), there
+--   is a match. This means that 65535 cannot be used, which
 --   is fine for this since 65535 is not used as a country code.
 data Trie = Trie
   { trieValue :: {-# UNPACK #-} !Word16
