@@ -39,7 +39,7 @@ singleton fullName code = go fullName where
     Nothing -> Trie code HM.empty
 
 instance Semigroup Trie where
-  (<>) = mappend
+  (<>) = append
 
 instance Monoid Trie where
   mempty = empty
