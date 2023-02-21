@@ -72,8 +72,8 @@ library
     , deepseq >= 1.3.0.2 && <1.5
     , entropy >=0.4.1.5 && <0.5
     , hashable >=1.2 && <1.5
-    , primitive >= 0.6.4 && <0.8
-    , primitive-unlifted >= 0.1.3 && <1.0
+    , primitive >= 0.6.4 && <0.9
+    , primitive-unlifted >= 0.1.3 && <1.4
     , scientific >=0.3 && <0.4
     , text >= 2.0 && <2.1
     , text-short >=0.1.3
