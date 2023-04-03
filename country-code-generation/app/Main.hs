@@ -129,11 +129,22 @@ identifierModule s = do
     SMP.yield " = Country "
     yieldLazyText (TB.toLazyText (TBI.decimal (countryCode country)))
     SMP.yield "\n\n"
+    SMP.yield "pattern "
+    SMP.yield patternName
+    SMP.yield " :: Country\n"
+    SMP.yield "pattern "
+    SMP.yield patternName
+    SMP.yield " = Country "
+    yieldLazyText (TB.toLazyText (TBI.decimal (countryCode country)))
+    SMP.yield "\n\n"
 
 toIdentifier :: Text -> Text
 toIdentifier t = case (T.uncons . T.filter isAlpha . T.toTitle) t of
   Nothing -> T.empty
   Just (b,bs) -> T.cons (toLower b) bs
+
+toPatternName :: Text -> Text
+toPatternName = T.filter isAlpha . T.toTitle
 
 englishEncoding :: Monad m => Stream (Of Country) m r -> Stream (Of Text) m r
 englishEncoding s = do
