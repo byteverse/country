@@ -40,13 +40,13 @@ import Country.Unexposed.Names (hashMapUtf16,hashMapUtf8)
 import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish,encodeEnglishShort)
 import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
 import Country.Unexposed.TrieByte (TrieByte,trieByteFromList,trieByteParser)
-import Country.Unexposed.Util (mapTextArray,charToWord8,word16ToInt,timesTwo,timesThree)
+import Country.Unexposed.Util (newZeroedByteArray,mapTextArray,charToWord8,word16ToInt,timesTwo,timesThree)
 import Country.Unsafe (Country(..))
 import Data.Bytes.Types (Bytes(Bytes))
 import Data.ByteString (ByteString)
 import Data.Char (toLower)
 import Data.Coerce (coerce)
-import Data.Primitive (writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
+import Data.Primitive (writeByteArray,indexByteArray,unsafeFreezeByteArray)
 import Data.Primitive.ByteArray (ByteArray(..))
 import Data.Primitive.Ptr (indexOffPtr)
 import Data.Text (Text)
@@ -146,7 +146,7 @@ numberOfCountries = length countryNameQuads
 -- | The elements in this array are Word16
 positions :: ByteArray
 positions = runST $ do
-  m <- newByteArray (timesTwo numberOfPossibleCodes)
+  m <- newZeroedByteArray (timesTwo numberOfPossibleCodes)
   forM_ (zip (enumFrom (0 :: Word16)) countryNameQuads) $ \(ix,(n,_,_,_)) -> do
     writeByteArray m (word16ToInt n) ix
   unsafeFreezeByteArray m
