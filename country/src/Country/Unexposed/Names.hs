@@ -32,6 +32,7 @@ import Data.Word
 import Control.DeepSeq (NFData)
 import Country.Unexposed.Alias (aliases)
 import Country.Unexposed.Encode.English (countryNameQuads)
+import Country.Unexposed.Util (newZeroedByteArray)
 import Data.Bytes.Types (Bytes(Bytes))
 import Data.ByteString (ByteString)
 import Data.Char (toLower,isAlpha,toUpper)
@@ -40,7 +41,7 @@ import Data.Hashable (Hashable)
 import Data.HashMap.Strict (HashMap)
 import Data.Primitive (Array,indexArray,newArray,unsafeFreezeArray,writeArray)
 import Data.Primitive (sizeOf)
-import Data.Primitive (writeByteArray,indexByteArray,unsafeFreezeByteArray,newByteArray)
+import Data.Primitive (writeByteArray,indexByteArray,unsafeFreezeByteArray)
 import Data.Primitive.ByteArray (ByteArray(..))
 import Data.Primitive.Types (Prim)
 import Data.Text (Text)
@@ -186,7 +187,7 @@ orderedCountryCodes = L.sort $ map (\(a,_,_,_) -> a) countryNameQuads
 
 countryCodeToSequentialMapping :: ByteArray
 countryCodeToSequentialMapping = runST $ do
-  numbers <- newByteArray (numberOfPossibleCodes * sizeOf (undefined :: Int))
+  numbers <- newZeroedByteArray (numberOfPossibleCodes * sizeOf (undefined :: Int))
   forM_ (zip [0 :: Int,1..] orderedCountryCodes) $ \(number,code) -> do
     writeByteArray numbers (word16ToInt code) number
   unsafeFreezeByteArray numbers
@@ -194,7 +195,7 @@ countryCodeToSequentialMapping = runST $ do
 
 sequentialToCountryCodeMapping :: ByteArray
 sequentialToCountryCodeMapping = runST $ do
-  codes <- newByteArray (actualNumberOfCountries * sizeOf (undefined :: Word16))
+  codes <- newZeroedByteArray (actualNumberOfCountries * sizeOf (undefined :: Word16))
   forM_ (zip [0 :: Int,1..] orderedCountryCodes) $ \(number,code) -> do
     writeByteArray codes number (code :: Word16)
   unsafeFreezeByteArray codes
@@ -235,11 +236,7 @@ decodeNumeric n = if n < 1000 && indexByteArray numericValidities (word16ToInt n
 -- | The elements in this array are Word8 (basically boolean)
 numericValidities :: ByteArray
 numericValidities = runST $ do
-  m <- newByteArray numberOfPossibleCodes
-  let clear !ix = if ix < numberOfPossibleCodes
-        then writeByteArray m ix (0 :: Word8)
-        else return ()
-  clear 0
+  m <- newZeroedByteArray numberOfPossibleCodes
   forM_ countryNameQuads $ \(n,_,_,_) -> do
     writeByteArray m (word16ToInt n) (1 :: Word8)
   unsafeFreezeByteArray m

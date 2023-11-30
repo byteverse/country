@@ -2,7 +2,8 @@
 {-# LANGUAGE MagicHash #-}
 
 module Country.Unexposed.Util
-  ( mapTextArray
+  ( newZeroedByteArray
+  , mapTextArray
   , charToWord8
   , word16ToChar
   , word16ToInt
@@ -11,14 +12,24 @@ module Country.Unexposed.Util
   , half
   ) where
 
+import Control.Monad.Primitive (PrimMonad, PrimState)
 import Data.Bits (unsafeShiftL,unsafeShiftR)
 import Data.Char (chr,ord)
+import Data.Primitive.ByteArray (MutableByteArray,newByteArray,fillByteArray)
 import Data.Word (Word8,Word16)
 import GHC.Exts (sizeofByteArray#)
 import GHC.Int (Int(I#))
 
 import qualified Data.Text.Array as TA
 
+newZeroedByteArray :: PrimMonad m => Int -> m (MutableByteArray (PrimState m))
+newZeroedByteArray len = do
+  arr <- newByteArray len
+  let arrStart = 0
+  let zeroByte = 0
+  fillByteArray arr arrStart len zeroByte
+  pure arr
+{-# INLINE newZeroedByteArray #-}
 
 mapTextArray :: (Char -> Char) -> TA.Array -> TA.Array
 mapTextArray f a@(TA.ByteArray inner) = TA.run $ do

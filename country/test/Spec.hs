@@ -65,6 +65,8 @@ main = defaultMain $ testGroup "Country" $
         ===
         (indexOffPtr ptr 0 :: Word8, indexOffPtr ptr 1 :: Word8)
       )
+  , testProperty "encode-decode-numeric"
+      (\x -> Just x === Country.decodeNumeric (Country.encodeNumeric x))
   , testGroup "Continent"
     [ testProperty "encode-decode-alpha-upper" $ \x ->
       Just x === Continent.decodeAlpha (Continent.alphaUpper x)
