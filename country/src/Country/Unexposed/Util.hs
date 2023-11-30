@@ -12,9 +12,10 @@ module Country.Unexposed.Util
   , half
   ) where
 
+import Control.Monad.Primitive (PrimMonad, PrimState)
 import Data.Bits (unsafeShiftL,unsafeShiftR)
 import Data.Char (chr,ord)
-import Data.Primitive.ByteArray (newByteArray,fillByteArray)
+import Data.Primitive.ByteArray (MutableByteArray,newByteArray,fillByteArray)
 import Data.Word (Word8,Word16)
 import GHC.Exts (sizeofByteArray#)
 import GHC.Int (Int(I#))
@@ -28,6 +29,7 @@ newZeroedByteArray len = do
   let zeroByte = 0
   fillByteArray arr arrStart len zeroByte
   pure arr
+{-# INLINE newZeroedByteArray #-}
 
 mapTextArray :: (Char -> Char) -> TA.Array -> TA.Array
 mapTextArray f a@(TA.ByteArray inner) = TA.run $ do

@@ -32,7 +32,7 @@ import Data.Word
 import Control.DeepSeq (NFData)
 import Country.Unexposed.Alias (aliases)
 import Country.Unexposed.Encode.English (countryNameQuads)
-import Country.Unexposed.Utils (newZeroedByteArray)
+import Country.Unexposed.Util (newZeroedByteArray)
 import Data.Bytes.Types (Bytes(Bytes))
 import Data.ByteString (ByteString)
 import Data.Char (toLower,isAlpha,toUpper)
