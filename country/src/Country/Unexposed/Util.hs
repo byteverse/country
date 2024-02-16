@@ -13,16 +13,16 @@ module Country.Unexposed.Util
   ) where
 
 import Control.Monad.Primitive (PrimMonad, PrimState)
-import Data.Bits (unsafeShiftL,unsafeShiftR)
-import Data.Char (chr,ord)
-import Data.Primitive.ByteArray (MutableByteArray,newByteArray,fillByteArray)
-import Data.Word (Word8,Word16)
+import Data.Bits (unsafeShiftL, unsafeShiftR)
+import Data.Char (chr, ord)
+import Data.Primitive.ByteArray (MutableByteArray, fillByteArray, newByteArray)
+import Data.Word (Word16, Word8)
 import GHC.Exts (sizeofByteArray#)
-import GHC.Int (Int(I#))
+import GHC.Int (Int (I#))
 
 import qualified Data.Text.Array as TA
 
-newZeroedByteArray :: PrimMonad m => Int -> m (MutableByteArray (PrimState m))
+newZeroedByteArray :: (PrimMonad m) => Int -> m (MutableByteArray (PrimState m))
 newZeroedByteArray len = do
   arr <- newByteArray len
   let arrStart = 0
@@ -36,11 +36,12 @@ mapTextArray f a@(TA.ByteArray inner) = TA.run $ do
   let len = I# (sizeofByteArray# inner)
   m <- TA.new len
   TA.copyI len m 0 a 0
-  let go !ix = if ix < len
-        then do
-          TA.unsafeWrite m ix (charToWord8 (f (word8ToChar (TA.unsafeIndex a ix))))
-          go (ix + 1)
-        else return ()
+  let go !ix =
+        if ix < len
+          then do
+            TA.unsafeWrite m ix (charToWord8 (f (word8ToChar (TA.unsafeIndex a ix))))
+            go (ix + 1)
+          else return ()
   go 0
   return m
 {-# INLINE mapTextArray #-}
