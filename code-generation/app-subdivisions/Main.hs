@@ -2,19 +2,20 @@
 
 module Main where
 
-import Control.Monad (forM,forM_)
+import Control.Monad (forM, forM_)
 import Data.List.Split (splitOn)
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
-import System.IO (stderr,Handle,withFile,hPutStrLn,IOMode(..))
+import System.IO (Handle, IOMode (..), hPutStrLn, stderr, withFile)
 
 main :: IO ()
 main = do
-  (inFile,outFile) <- getArgs >>= \case
-    [a, b] ->  pure (a, b)
-    _ -> die "usage: two required filepath arguments (in, out)"
+  (inFile, outFile) <-
+    getArgs >>= \case
+      [a, b] -> pure (a, b)
+      _ -> die "usage: two required filepath arguments (in, out)"
   rows <- parse inFile
-  withFile outFile WriteMode $ \fp ->  do
+  withFile outFile WriteMode $ \fp -> do
     render fp rows
 
 parse :: FilePath -> IO [(String, String, String)]
@@ -22,11 +23,11 @@ parse file = do
   content <- readFile file
   rawRows <- case lines content of
     [] -> die "no file contents"
-    (header:body)
+    (header : body)
       | header == expectedHeader -> pure body
       | otherwise -> die $ "unrecognized header: " ++ show header
   forM (splitOn "," <$> rawRows) $ \case
-    [x,y,z] -> pure (x,y,z)
+    [x, y, z] -> pure (x, y, z)
     _ -> die "bad data row"
 
 render :: Handle -> [(String, String, String)] -> IO ()
@@ -86,15 +87,15 @@ render out xs = do
   put "{-# NOINLINE categoryArray #-}"
   put "actualNumberOfSubdivisions :: Int"
   put $ "actualNumberOfSubdivisions = " ++ show len
-  where
+ where
   put = hPutStrLn out
   len = length xs
   topX = head xs
   restXs = tail xs
-  putThing c it = put $ "  " ++ c:" " ++ show it
-  putCode c (code,_,_) = putThing c code
-  putName c (_,name,_) = putThing c name
-  putCategory c (_,_,category) = putThing c category
+  putThing c it = put $ "  " ++ c : " " ++ show it
+  putCode c (code, _, _) = putThing c code
+  putName c (_, name, _) = putThing c name
+  putCategory c (_, _, category) = putThing c category
 
 expectedHeader :: String
 expectedHeader = "code,name,category"

@@ -2,14 +2,14 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE MagicHash #-}
 
-{-# OPTIONS_GHC -Wall #-}
-
 -- | Country type and helpers.
 module Country
   ( Country
+
     -- * Three digit code
   , encodeNumeric
   , decodeNumeric
+
     -- * Name
   , encodeEnglish
   , encodeEnglishShort
@@ -18,6 +18,7 @@ module Country
   , decodeUtf8Bytes
   , parser
   , parserUtf8
+
     -- * Alpha-2 and Alpha-3
   , alphaTwoUpper
   , alphaTwoUpperUtf8Ptr
@@ -27,6 +28,7 @@ module Country
   , alphaTwoLower
   , decodeAlphaTwo
   , decodeAlphaThree
+
     -- * Hash Maps for Decoding
   , hashMapUtf8
   , hashMapUtf16
@@ -36,23 +38,21 @@ import Control.Monad (forM_)
 import Control.Monad.ST (runST)
 import Country.Unexposed.AlphaTwoPtr (alphaTwoPtr)
 import Country.Unexposed.Encode.English (countryNameQuads)
-import Country.Unexposed.Names (hashMapUtf16,hashMapUtf8)
-import Country.Unexposed.Names (numberOfPossibleCodes,alphaTwoHashMap,alphaThreeHashMap,decodeMap,decodeMapUtf8,decodeNumeric,encodeEnglish,encodeEnglishShort)
-import Country.Unexposed.Trie (Trie,trieFromList,trieParser)
-import Country.Unexposed.TrieByte (TrieByte,trieByteFromList,trieByteParser)
-import Country.Unexposed.Util (newZeroedByteArray,mapTextArray,charToWord8,word16ToInt,timesTwo,timesThree)
-import Country.Unsafe (Country(..))
-import Data.Bytes.Types (Bytes(Bytes))
+import Country.Unexposed.Names (alphaThreeHashMap, alphaTwoHashMap, decodeMap, decodeMapUtf8, decodeNumeric, encodeEnglish, encodeEnglishShort, hashMapUtf16, hashMapUtf8, numberOfPossibleCodes)
+import Country.Unexposed.Trie (Trie, trieFromList, trieParser)
+import Country.Unexposed.TrieByte (TrieByte, trieByteFromList, trieByteParser)
+import Country.Unexposed.Util (charToWord8, mapTextArray, newZeroedByteArray, timesThree, timesTwo, word16ToInt)
+import Country.Unsafe (Country (..))
 import Data.ByteString (ByteString)
+import Data.Bytes.Types (Bytes (Bytes))
 import Data.Char (toLower)
 import Data.Coerce (coerce)
-import Data.Primitive (writeByteArray,indexByteArray,unsafeFreezeByteArray)
-import Data.Primitive.ByteArray (ByteArray(..))
+import Data.Primitive (indexByteArray, unsafeFreezeByteArray, writeByteArray)
+import Data.Primitive.ByteArray (ByteArray (..))
 import Data.Primitive.Ptr (indexOffPtr)
 import Data.Text (Text)
-import Data.Word (Word16)
-import Data.Word (Word8)
-import Foreign.Ptr (Ptr,plusPtr)
+import Data.Word (Word16, Word8)
+import Foreign.Ptr (Ptr, plusPtr)
 
 import qualified Data.Attoparsec.ByteString as AB
 import qualified Data.Attoparsec.Text as AT
@@ -63,8 +63,9 @@ import qualified Data.Text.Array as TA
 import qualified Data.Text.Encoding as TE
 import qualified Data.Text.Internal as TI
 
--- | Convert a country to its numeric code. This is a
---   three-digit number and will consequently be less than 1000.
+{- | Convert a country to its numeric code. This is a
+  three-digit number and will consequently be less than 1000.
+-}
 encodeNumeric :: Country -> Word16
 encodeNumeric (Country n) = n
 
@@ -72,20 +73,22 @@ encodeNumeric (Country n) = n
 alphaTwoUpper :: Country -> Text
 alphaTwoUpper c = TI.text allAlphaTwoUpper (timesTwo (indexOfCountry c)) 2
 
--- | The alpha-2 country code, uppercase. The resulting address always
--- has two bytes at it.
+{- | The alpha-2 country code, uppercase. The resulting address always
+has two bytes at it.
+-}
 alphaTwoUpperUtf8Ptr :: Country -> Ptr Word8
 alphaTwoUpperUtf8Ptr (Country c) =
   plusPtr alphaTwoPtr (2 * fromIntegral c)
 
 alphaTwoUpperUtf8BoundedBuilder :: Country -> BBU.Builder 2
-alphaTwoUpperUtf8BoundedBuilder !c = BBU.construct
-  (\arr ix -> do
-    let ptr = alphaTwoUpperUtf8Ptr c
-    writeByteArray arr ix (indexOffPtr ptr 0)
-    writeByteArray arr (ix + 1) (indexOffPtr ptr 1)
-    pure (ix + 2)
-  )
+alphaTwoUpperUtf8BoundedBuilder !c =
+  BBU.construct
+    ( \arr ix -> do
+        let ptr = alphaTwoUpperUtf8Ptr c
+        writeByteArray arr ix (indexOffPtr ptr 0)
+        writeByteArray arr (ix + 1) (indexOffPtr ptr 1)
+        pure (ix + 2)
+    )
 
 -- | The alpha-3 country code, uppercase
 alphaThreeUpper :: Country -> Text
@@ -107,12 +110,12 @@ decodeAlphaTwo = flip HM.lookup alphaTwoHashMap
 decodeAlphaThree :: Text -> Maybe Country
 decodeAlphaThree = flip HM.lookup alphaThreeHashMap
 
-
--- | Parse a country from its name. This function is language-agnostic
---   and is very generous with what it accepts. It handles official
---   names, colloquial names, acroynms, and obsolete names for many
---   countries. It strives to handle any source language. Open an
---   issue on the issue tracker if there are names that are missing.
+{- | Parse a country from its name. This function is language-agnostic
+  and is very generous with what it accepts. It handles official
+  names, colloquial names, acroynms, and obsolete names for many
+  countries. It strives to handle any source language. Open an
+  issue on the issue tracker if there are names that are missing.
+-}
 decode :: Text -> Maybe Country
 decode (TI.Text (TA.ByteArray arr) off8 len8) =
   case (BytesHashMap.lookup (Bytes (ByteArray arr) off8 len8) hashMapUtf8) of
@@ -128,11 +131,12 @@ decodeUtf8Bytes !bs = case (BytesHashMap.lookup bs hashMapUtf8) of
   Nothing -> Nothing
   Just w -> Just (Country (fromIntegral w))
 
--- | Parse a country from its name using an attoparsec text parser. This
---   function is language-agnostic and can handle any source language.
---   In the case that one possible country name is a prefix of another
---   possible name (for example, United States vs United States of America),
---   the longest possible will be parsed.
+{- | Parse a country from its name using an attoparsec text parser. This
+  function is language-agnostic and can handle any source language.
+  In the case that one possible country name is a prefix of another
+  possible name (for example, United States vs United States of America),
+  the longest possible will be parsed.
+-}
 parser :: AT.Parser Country
 parser = coerce (trieParser decodeTrie)
 
@@ -147,7 +151,7 @@ numberOfCountries = length countryNameQuads
 positions :: ByteArray
 positions = runST $ do
   m <- newZeroedByteArray (timesTwo numberOfPossibleCodes)
-  forM_ (zip (enumFrom (0 :: Word16)) countryNameQuads) $ \(ix,(n,_,_,_)) -> do
+  forM_ (zip (enumFrom (0 :: Word16)) countryNameQuads) $ \(ix, (n, _, _, _)) -> do
     writeByteArray m (word16ToInt n) ix
   unsafeFreezeByteArray m
 {-# NOINLINE positions #-}
@@ -162,7 +166,7 @@ indexOfCountry (Country n) =
 allAlphaTwoUpper :: TA.Array
 allAlphaTwoUpper = TA.run $ do
   m <- TA.new (timesTwo numberOfCountries)
-  forM_ countryNameQuads $ \(n,_,(a1,a2),_) -> do
+  forM_ countryNameQuads $ \(n, _, (a1, a2), _) -> do
     let ix = timesTwo (indexOfCountry (Country n))
     TA.unsafeWrite m ix (charToWord8 a1)
     TA.unsafeWrite m (ix + 1) (charToWord8 a2)
@@ -172,7 +176,7 @@ allAlphaTwoUpper = TA.run $ do
 allAlphaThreeUpper :: TA.Array
 allAlphaThreeUpper = TA.run $ do
   m <- TA.new (timesThree numberOfCountries)
-  forM_ countryNameQuads $ \(n,_,_,(a1,a2,a3)) -> do
+  forM_ countryNameQuads $ \(n, _, _, (a1, a2, a3)) -> do
     let ix = timesThree (indexOfCountry (Country n))
     TA.unsafeWrite m ix (charToWord8 a1)
     TA.unsafeWrite m (ix + 1) (charToWord8 a2)
@@ -189,9 +193,9 @@ allAlphaTwoLower = mapTextArray toLower allAlphaTwoUpper
 {-# NOINLINE allAlphaTwoLower #-}
 
 decodeTrie :: Trie
-decodeTrie = trieFromList (map (\(a,Country x) -> (a,x)) (HM.toList decodeMap))
+decodeTrie = trieFromList (map (\(a, Country x) -> (a, x)) (HM.toList decodeMap))
 {-# NOINLINE decodeTrie #-}
 
 decodeTrieUtf8 :: TrieByte
-decodeTrieUtf8 = trieByteFromList (map (\(a,Country x) -> (TE.encodeUtf8 a,x)) (HM.toList decodeMap))
+decodeTrieUtf8 = trieByteFromList (map (\(a, Country x) -> (TE.encodeUtf8 a, x)) (HM.toList decodeMap))
 {-# NOINLINE decodeTrieUtf8 #-}

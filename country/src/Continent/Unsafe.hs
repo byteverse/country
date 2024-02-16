@@ -3,7 +3,7 @@
 {-# LANGUAGE PatternSynonyms #-}
 
 module Continent.Unsafe
-  ( Continent(..)
+  ( Continent (..)
   , pattern Africa
   , pattern Asia
   , pattern Antarctica
@@ -17,10 +17,8 @@ module Continent.Unsafe
 import Data.Text (Text)
 import Data.Word (Word8)
 
-
 newtype Continent = Continent Word8
-  deriving(Eq,Ord,Enum)
-
+  deriving (Eq, Ord, Enum)
 
 {-# COMPLETE Africa, Asia, Antarctica, Europe, NorthAmerica, Oceania, SouthAmerica #-}
 pattern Africa, Asia, Antarctica, Europe, NorthAmerica, Oceania, SouthAmerica :: Continent
@@ -32,8 +30,7 @@ pattern NorthAmerica = Continent 4
 pattern Oceania = Continent 5
 pattern SouthAmerica = Continent 6
 
-
-continentNameDb :: [(Word8,Text,(Char,Char))]
+continentNameDb :: [(Word8, Text, (Char, Char))]
 continentNameDb =
   [ (0, "Africa", ('A', 'F'))
   , (1, "Asia", ('A', 'N'))

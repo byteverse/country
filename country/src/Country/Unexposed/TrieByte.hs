@@ -4,22 +4,22 @@ module Country.Unexposed.TrieByte
   , trieByteParser
   ) where
 
-import Data.HashMap.Strict (HashMap)
-import Data.Word (Word16,Word8)
-import Data.ByteString (ByteString)
-import Data.Semigroup (Semigroup)
 import Control.Applicative ((<|>))
-import qualified Data.ByteString as B
-import qualified Data.HashMap.Strict as HM
 import qualified Data.Attoparsec.ByteString as AB
+import Data.ByteString (ByteString)
+import qualified Data.ByteString as B
+import Data.HashMap.Strict (HashMap)
+import qualified Data.HashMap.Strict as HM
 import qualified Data.Semigroup as SG
+import Data.Word (Word16, Word8)
 
--- | If the value is not the max Word16 (65535), there 
---   is a match. This means that 65535 cannot be used, which 
---   is fine for this since 65535 is not used as a country code.
+{- | If the value is not the max Word16 (65535), there
+  is a match. This means that 65535 cannot be used, which
+  is fine for this since 65535 is not used as a country code.
+-}
 data TrieByte = TrieByte
-  { trieValue :: {-# UNPACK #-} !Word16
-  , trieChildren :: !(HashMap Word8 TrieByte)
+  { _trieValue :: {-# UNPACK #-} !Word16
+  , _trieChildren :: !(HashMap Word8 TrieByte)
   }
 
 empty :: TrieByte
@@ -32,10 +32,11 @@ placeholder :: Word16
 placeholder = 0xFFFF
 
 singleton :: ByteString -> Word16 -> TrieByte
-singleton fullName code = go fullName where
+singleton fullName code = go fullName
+ where
   go :: ByteString -> TrieByte
   go name = case B.uncons name of
-    Just (char,nameNext) -> TrieByte placeholder (HM.singleton char (go nameNext))
+    Just (char, nameNext) -> TrieByte placeholder (HM.singleton char (go nameNext))
     Nothing -> TrieByte code HM.empty
 
 instance Semigroup TrieByte where
@@ -45,7 +46,7 @@ instance Monoid TrieByte where
   mempty = empty
   mappend = (SG.<>)
 
-trieByteFromList :: [(ByteString,Word16)] -> TrieByte
+trieByteFromList :: [(ByteString, Word16)] -> TrieByte
 trieByteFromList = foldMap (uncurry singleton)
 
 -- it seems like attoparsec should have some kind of convenience
@@ -53,7 +54,8 @@ trieByteFromList = foldMap (uncurry singleton)
 -- input once your certain that it will be consumed, but I cannot
 -- find a way to use the api to do this.
 trieByteParser :: TrieByte -> AB.Parser Word16
-trieByteParser = go where
+trieByteParser = go
+ where
   go :: TrieByte -> AB.Parser Word16
   go (TrieByte value children) = do
     let keepGoing = do
@@ -64,5 +66,3 @@ trieByteParser = go where
     if value == placeholder
       then keepGoing
       else keepGoing <|> return value
-
-

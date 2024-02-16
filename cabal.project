@@ -1,1 +1,3 @@
 packages: ./country, ./code-generation
+tests: True
+benchmarks: True

@@ -4,22 +4,22 @@ module Country.Unexposed.Trie
   , trieParser
   ) where
 
-import Data.HashMap.Strict (HashMap)
-import Data.Word (Word16)
-import Data.Text (Text)
-import Data.Semigroup (Semigroup)
 import Control.Applicative ((<|>))
-import qualified Data.Text as T
-import qualified Data.HashMap.Strict as HM
 import qualified Data.Attoparsec.Text as AT
+import Data.HashMap.Strict (HashMap)
+import qualified Data.HashMap.Strict as HM
 import qualified Data.Semigroup as SG
+import Data.Text (Text)
+import qualified Data.Text as T
+import Data.Word (Word16)
 
--- | If the value is not the max Word16 (65535), there 
---   is a match. This means that 65535 cannot be used, which 
---   is fine for this since 65535 is not used as a country code.
+{- | If the value is not the max Word16 (65535), there
+  is a match. This means that 65535 cannot be used, which
+  is fine for this since 65535 is not used as a country code.
+-}
 data Trie = Trie
-  { trieValue :: {-# UNPACK #-} !Word16
-  , trieChildren :: !(HashMap Char Trie)
+  { _trieValue :: {-# UNPACK #-} !Word16
+  , _trieChildren :: !(HashMap Char Trie)
   }
 
 empty :: Trie
@@ -32,10 +32,11 @@ placeholder :: Word16
 placeholder = 0xFFFF
 
 singleton :: Text -> Word16 -> Trie
-singleton fullName code = go fullName where
+singleton fullName code = go fullName
+ where
   go :: Text -> Trie
   go name = case T.uncons name of
-    Just (char,nameNext) -> Trie placeholder (HM.singleton char (go nameNext))
+    Just (char, nameNext) -> Trie placeholder (HM.singleton char (go nameNext))
     Nothing -> Trie code HM.empty
 
 instance Semigroup Trie where
@@ -45,7 +46,7 @@ instance Monoid Trie where
   mempty = empty
   mappend = (SG.<>)
 
-trieFromList :: [(Text,Word16)] -> Trie
+trieFromList :: [(Text, Word16)] -> Trie
 trieFromList = foldMap (uncurry singleton)
 
 -- it seems like attoparsec should have some kind of convenience
@@ -53,7 +54,8 @@ trieFromList = foldMap (uncurry singleton)
 -- input once your certain that it will be consumed, but I cannot
 -- find a way to use the api to do this.
 trieParser :: Trie -> AT.Parser Word16
-trieParser = go where
+trieParser = go
+ where
   go :: Trie -> AT.Parser Word16
   go (Trie value children) = do
     let keepGoing = do
@@ -64,4 +66,3 @@ trieParser = go where
     if value == placeholder
       then keepGoing
       else keepGoing <|> return value
-

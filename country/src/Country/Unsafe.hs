@@ -2,7 +2,7 @@
 {-# LANGUAGE UnboxedTuples #-}
 {-# OPTIONS_HADDOCK not-home #-}
 
-{-| This module provides the data constructor for a 'Country'.
+{- | This module provides the data constructor for a 'Country'.
     While pattern matching on a country is perfectly safe,
     constructing one is not. There is an invariant the type
     system does not capture that the country number, as defined
@@ -11,8 +11,7 @@
     in this library to segfault.
 -}
 module Country.Unsafe
-  ( Country(..)
+  ( Country (..)
   ) where
 
-import Country.Unexposed.Names (Country(..))
-
+import Country.Unexposed.Names (Country (..))

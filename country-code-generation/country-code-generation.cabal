@@ -1,35 +1,38 @@
-name: country-code-generation
-version: 0.1.0.0
--- synopsis:
--- description:
-homepage: https://github.com/andrewthad/country#readme
-license: BSD3
-license-file: LICENSE
-author: Andrew Martin
-maintainer: andrew.thaddeus@gmail.com
-copyright: 2017 Andrew Martin
-category: Web
-build-type: Simple
-extra-source-files: README.md, ../aliases.txt, ../countries.csv
-cabal-version: >=1.10
+cabal-version: 3.0
+name:          country-code-generation
+version:       0.1.0.0
+homepage:      https://github.com/byteverse/country
+bug-reports:   https://github.com/byteverse/country/issues
+license:       BSD-3-Clause
+license-file:  LICENSE
+author:        Andrew Martin
+maintainer:    amartin@layer3com.com
+copyright:     2017 Andrew Martin
+category:      Web
+build-type:    Simple
+
+common build-settings
+  default-language: Haskell2010
+  ghc-options:      -Wall -Wunused-packages
 
 executable country-code-generation
+  import:         build-settings
+  ghc-options:    -O2
   hs-source-dirs: app
-  main-is: Main.hs
+  main-is:        Main.hs
   build-depends:
-      base
+    , base                  <5.0
+    , bytestring            >=0.10
+    , colonnade             >=1.2.0.1
+    , containers
+    , disjoint-containers   >=0.3
+    , primitive
+    , siphon                >=0.8.1
     , streaming
     , streaming-bytestring
-    , bytestring >= 0.10
-    , text >= 1.2 && < 2.1
-    , siphon >= 0.8.1
-    , colonnade >= 1.2.0.1
-    , disjoint-containers >= 0.3
-    , containers
+    , text                  >=1.2     && <2.1
     , transformers
-    , primitive
-  default-language: Haskell2010
 
 source-repository head
   type:     git
-  location: https://github.com/andrewthad/country
+  location: git://github.com/byteverse/country.git
