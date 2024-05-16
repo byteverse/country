@@ -1,43 +1,47 @@
 cabal-version: 3.0
-name: country-code-generation
-version: 0.1.0.0
--- synopsis:
--- description:
-homepage: https://github.com/andrewthad/country#readme
-license: BSD-3-Clause
-license-file: LICENSE
-author: Andrew Martin
-maintainer: andrew.thaddeus@gmail.com
-copyright: 2017 Andrew Martin
-category: Web
-build-type: Simple
-extra-source-files: README.md, ../aliases.txt, ../countries.csv
+name:          code-generation
+version:       0.1.0.0
+homepage:      https://github.com/byteverse/country
+bug-reports:   https://github.com/byteverse/country/issues
+license:       BSD-3-Clause
+license-file:  LICENSE
+author:        Andrew Martin
+maintainer:    amartin@layer3com.com
+copyright:     2017 Andrew Martin
+category:      Web
+build-type:    Simple
+
+common build-settings
+  default-language: Haskell2010
+  ghc-options:      -Wall -Wunused-packages
 
 executable country-code-generation
+  import:         build-settings
+  ghc-options:    -O2
   hs-source-dirs: app-countries
-  main-is: Main.hs
+  main-is:        Main.hs
   build-depends:
-    , base
-    , bytestring >= 0.10
-    , colonnade >= 1.2.0.1
+    , base                  >=4.9
+    , bytestring            >=0.10
+    , colonnade             >=1.2.0.1
     , containers
-    , disjoint-containers >= 0.2.3
+    , disjoint-containers   >=0.2.3
     , primitive
-    , siphon >= 0.8.1
+    , siphon                >=0.8.1
     , streaming
     , streaming-bytestring
-    , text >= 1.2
+    , text                  >=1.2
     , transformers
-  default-language: Haskell2010
 
 executable subdivision-code-generation
+  import:         build-settings
+  ghc-options:    -O2
   hs-source-dirs: app-subdivisions
-  main-is: Main.hs
+  main-is:        Main.hs
   build-depends:
-      base
-    , split >=0.2
-  default-language: Haskell2010
+    , base   >=4.9
+    , split  >=0.2
 
 source-repository head
   type:     git
-  location: https://github.com/andrewthad/country
+  location: git://github.com/byteverse/country.git
