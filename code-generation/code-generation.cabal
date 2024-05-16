@@ -22,7 +22,7 @@ executable country-code-generation
   main-is:        Main.hs
   build-depends:
     , base                  >=4.9
-    , bytestring            >=0.10    && <0.12
+    , bytestring            >=0.10
     , colonnade             >=1.2.0.1
     , containers
     , disjoint-containers   >=0.2.3

@@ -122,19 +122,19 @@ benchmark bench
   hs-source-dirs: bench
   main-is:        Main.hs
 
--- benchmark bench-size
---   import:         build-settings
---   type:           exitcode-stdio-1.0
---   build-depends:
---     , base
---     , bytehash
---     , bytestring
---     , compact
---     , country
+benchmark bench-size
+  import:         build-settings
+  type:           exitcode-stdio-1.0
+  build-depends:
+    , base
+    , bytehash
+    , bytestring
+    , compact
+    , country
 
---   ghc-options:    -O2
---   hs-source-dirs: bench
---   main-is:        Size.hs
+  ghc-options:    -O2
+  hs-source-dirs: bench
+  main-is:        Size.hs
 
 source-repository head
   type:     git
