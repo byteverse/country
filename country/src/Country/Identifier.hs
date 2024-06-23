@@ -901,7 +901,7 @@ liechtenstein = Country 438
 pattern Liechtenstein :: Country
 pattern Liechtenstein = Country 438
 
--- | Lietuva; Lithuania; Lithuania, Republic of; Republic of Lithuania; Литва
+-- | Lietuva; Lietuvos Respublika; Lithuania; Lithuania, Republic of; Republic of Lithuania
 lithuania :: Country
 lithuania = Country 440
 
