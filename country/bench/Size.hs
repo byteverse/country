@@ -5,9 +5,7 @@ import Country (hashMapUtf16, hashMapUtf8)
 import Data.Compact
 import Data.Foldable
 
-import qualified Country
 import qualified Data.Bytes.HashMap.Word as Map
-import qualified Data.List as List
 
 main :: IO ()
 main = do
