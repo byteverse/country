@@ -1,6 +1,6 @@
 cabal-version:   3.0
 name:            country
-version:         0.2.4.2
+version:         0.2.5.0
 synopsis:        Country data type and functions
 description:
   The `country` library provides a data type for dealing with
@@ -115,7 +115,7 @@ benchmark bench
   build-depends:
     , base
     , country
-    , gauge
+    , criterion
     , text     >=1.2
 
   ghc-options:    -O2
@@ -128,7 +128,6 @@ benchmark bench-size
   build-depends:
     , base
     , bytehash
-    , bytestring
     , compact
     , country
 

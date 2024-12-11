@@ -2,7 +2,7 @@
 {-# LANGUAGE TypeApplications #-}
 
 import Data.Text (Text)
-import Gauge.Main (bench, defaultMain, whnf)
+import Criterion.Main (bench, defaultMain, whnf)
 
 import qualified Country
 import qualified Data.List as List
