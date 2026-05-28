@@ -73,7 +73,7 @@ library
     Country.Unexposed.Util
 
   build-depends:
-    , aeson                 >=1.2     && <2.3
+    , aeson                 >=1.2     && <2.4
     , attoparsec            >=0.13    && <0.15
     , base                  >=4.9     && <5
     , bytebuild             >=0.3.4   && <0.4
